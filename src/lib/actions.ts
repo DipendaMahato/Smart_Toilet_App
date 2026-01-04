@@ -1,0 +1,42 @@
+// @ts-nocheck
+'use server';
+
+import { generateHealthInsights } from '@/ai/flows/generate-health-insights';
+import { refineInsightsWithReasoning } from '@/ai/flows/refine-insights-with-reasoning';
+import { mockMedicalProfile, mockToiletSensorData } from '@/lib/data';
+import { z } from 'zod';
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+export async function getAiInsights() {
+  await sleep(1500); // Simulate network latency
+
+  try {
+    const medicalProfileString = JSON.stringify(mockMedicalProfile, null, 2);
+    const sensorDataString = JSON.stringify(mockToiletSensorData, null, 2);
+
+    const initialResult = await generateHealthInsights({
+      medicalProfileData: medicalProfileString,
+      toiletSensorData: sensorDataString,
+    });
+
+    if (!initialResult.insights) {
+      throw new Error("Initial insight generation failed.");
+    }
+
+    const finalResult = await refineInsightsWithReasoning({
+      initialInsights: initialResult.insights,
+      userProfile: medicalProfileString,
+      healthData: sensorDataString,
+    });
+    
+    return { 
+      insights: finalResult.refinedInsights, 
+      reasoning: initialResult.reasoning,
+    };
+
+  } catch (error) {
+    console.error('Error generating AI insights:', error);
+    return { error: 'Failed to generate insights. Please try again later.' };
+  }
+}
