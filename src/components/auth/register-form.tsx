@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,9 +20,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { RegisterSchema } from "@/lib/schemas";
+import { useToast } from "@/hooks/use-toast";
+import { sendOtpAction } from "@/lib/actions";
 
 export function RegisterForm() {
   const router = useRouter();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -39,12 +43,25 @@ export function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log(values);
+    const result = await sendOtpAction(values.email);
     setLoading(false);
-    // Redirect to profile completion
-    router.push("/dashboard/profile");
+
+    if (result.success) {
+      toast({
+        title: "OTP Sent",
+        description: "Check your email for the one-time password to complete your registration.",
+      });
+      // Store user details and OTP to verify on the next page
+      sessionStorage.setItem('otp', result.otp || '');
+      sessionStorage.setItem('user_details', JSON.stringify(values));
+      router.push("/verify-otp");
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Registration Failed",
+        description: result.error,
+      });
+    }
   }
 
   return (
