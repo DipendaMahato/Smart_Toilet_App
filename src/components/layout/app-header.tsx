@@ -17,6 +17,7 @@ import {
   Activity,
   Heart,
   Stethoscope,
+  UserCircle,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -30,8 +31,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { mockMedicalProfile } from "@/lib/data";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -63,7 +64,6 @@ function getPageTitle(pathname: string) {
 
 export default function AppHeader() {
   const pathname = usePathname();
-  const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
   const pageTitle = getPageTitle(pathname);
 
   return (
@@ -114,16 +114,11 @@ export default function AppHeader() {
             <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
-                {userAvatar && (
-                    <Image
-                    src={userAvatar.imageUrl}
-                    width={32}
-                    height={32}
-                    alt="User Avatar"
-                    className="rounded-full"
-                    data-ai-hint={userAvatar.imageHint}
-                    />
-                )}
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback>
+                    <UserCircle className="h-full w-full text-muted-foreground" />
+                  </AvatarFallback>
+                </Avatar>
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>

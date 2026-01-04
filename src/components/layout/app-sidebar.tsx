@@ -15,13 +15,14 @@ import {
   Activity,
   Heart,
   Stethoscope,
+  UserCircle,
 } from "lucide-react";
 import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { mockMedicalProfile } from "@/lib/data";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -38,7 +39,6 @@ const navItems = [
 
 export default function AppSidebar() {
   const pathname = usePathname();
-  const userAvatar = PlaceHolderImages.find((img) => img.id === "user-avatar");
 
   return (
     <aside className="hidden md:flex w-64 flex-col border-r bg-card">
@@ -67,23 +67,19 @@ export default function AppSidebar() {
       </div>
       <div className="mt-auto border-t p-4">
         <div className="flex items-center gap-4">
-           {userAvatar && (
-            <Image
-              src={userAvatar.imageUrl}
-              width={40}
-              height={40}
-              alt="User Avatar"
-              className="rounded-full"
-              data-ai-hint={userAvatar.imageHint}
-            />
-          )}
+            <Avatar>
+                <AvatarFallback>
+                    <UserCircle className="h-10 w-10 text-muted-foreground" />
+                </AvatarFallback>
+            </Avatar>
           <div>
             <p className="font-semibold">{mockMedicalProfile.name}</p>
             <p className="text-xs text-muted-foreground">Premium User</p>
           </div>
           <Link href="/login" className="ml-auto">
-            <Button variant="ghost" size="icon" aria-label="Logout">
-              <LogOut className="h-5 w-5" />
+            <Button variant="ghost" size="icon">
+                <LogOut className="h-5 w-5" />
+                <span className="sr-only">Logout</span>
             </Button>
           </Link>
         </div>

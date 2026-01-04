@@ -1,7 +1,7 @@
 import { Stethoscope, Droplets, Thermometer, Activity, Scale, HeartPulse } from "lucide-react";
 
 export const mockMedicalProfile = {
-  name: "Jane Doe",
+  name: "Dipendra Mahato",
   dob: "1990-05-15",
   gender: "female",
   bloodGroup: "O+",

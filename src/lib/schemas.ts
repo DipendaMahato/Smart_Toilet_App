@@ -17,6 +17,7 @@ export const RegisterSchema = z.object({
 });
 
 export const ProfileSchema = z.object({
+  avatar: z.any().optional(),
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   dob: z.date({ required_error: "Date of birth is required."}),
   gender: z.enum(["male", "female", "other"], { required_error: "Please select a gender."}),

@@ -3,9 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { useState } from "react";
-import { CalendarIcon } from "lucide-react";
+import { useState, useRef } from "react";
+import { CalendarIcon, UserCircle } from "lucide-react";
 import { format } from "date-fns";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -24,6 +25,7 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import { ProfileSchema } from "@/lib/schemas";
 import { mockMedicalProfile } from "@/lib/data";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 type ProfileFormValues = z.infer<typeof ProfileSchema>;
 
@@ -35,6 +37,8 @@ const defaultValues: Partial<ProfileFormValues> = {
 export function ProfileForm() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(ProfileSchema),
@@ -53,9 +57,46 @@ export function ProfileForm() {
     console.log(data);
   }
 
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setAvatarPreview(URL.createObjectURL(file));
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+            control={form.control}
+            name="avatar"
+            render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Profile Picture</FormLabel>
+                    <FormControl>
+                        <div className="flex items-center gap-4">
+                            <Avatar className="h-20 w-20">
+                                <AvatarImage src={avatarPreview || undefined} alt="User avatar"/>
+                                <AvatarFallback>
+                                    <UserCircle className="h-full w-full text-muted-foreground" />
+                                </AvatarFallback>
+                            </Avatar>
+                            <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
+                                Change Picture
+                            </Button>
+                            <Input 
+                                ref={fileInputRef}
+                                type="file" 
+                                className="hidden"
+                                accept="image/*"
+                                onChange={handleAvatarChange}
+                             />
+                        </div>
+                    </FormControl>
+                    <FormMessage />
+                </FormItem>
+            )}
+        />
         <div className="grid md:grid-cols-2 gap-8">
             <FormField
             control={form.control}
@@ -143,7 +184,7 @@ export function ProfileForm() {
                     <FormControl>
                     <SelectTrigger>
                         <SelectValue placeholder="Select your blood group" />
-                    </SelectTrigger>
+                    </Trigger>
                     </FormControl>
                     <SelectContent>
                         {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(group => (
