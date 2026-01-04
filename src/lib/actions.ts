@@ -4,8 +4,6 @@
 import { config } from 'dotenv';
 config();
 
-import { generateHealthInsights } from '@/ai/flows/generate-health-insights';
-import { refineInsightsWithReasoning } from '@/ai/flows/refine-insights-with-reasoning';
 import { generateOtp } from '@/ai/flows/send-otp-flow';
 import { mockMedicalProfile, mockToiletSensorData } from '@/lib/data';
 import { z } from 'zod';
@@ -50,8 +48,11 @@ export async function sendOtpAction(email: string) {
   try {
     const { otp } = await generateOtp();
 
+    // Use direct SMTP transport for more reliability
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // true for 465, false for other ports
       auth: {
         user: process.env.EMAIL_SERVER_USER,
         pass: process.env.EMAIL_SERVER_PASSWORD,
@@ -59,10 +60,11 @@ export async function sendOtpAction(email: string) {
     });
 
     const mailOptions = {
-      from: process.env.EMAIL_SERVER_USER,
+      from: `"Smart Toilet for Real time Health Monitoring" <${process.env.EMAIL_SERVER_USER}>`,
       to: email,
-      subject: 'Your OTP Code',
-      text: `Your OTP is: ${otp}`,
+      subject: 'Your Verification Code',
+      text: `Your verification code is: ${otp}`,
+      html: `<b>Your verification code is: ${otp}</b>`,
     };
     
     await transporter.sendMail(mailOptions);
@@ -70,9 +72,8 @@ export async function sendOtpAction(email: string) {
     return { success: true, otp: otp };
 
   } catch (error) {
-    console.error('Error in sendOtpAction:', error);
-    // Return a more detailed error for debugging
+    console.error('Detailed Error in sendOtpAction:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    return { success: false, error: `Failed to send OTP. Please check server logs for details.` };
+    return { success: false, error: `Failed to send OTP. Please check server logs for details. Error: ${errorMessage}` };
   }
 }
