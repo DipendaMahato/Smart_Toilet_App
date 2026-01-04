@@ -45,7 +45,7 @@ export default function AppSidebar() {
       <div className="flex h-16 items-center justify-center border-b px-6">
         <Link href="/dashboard" className="flex items-center gap-2 font-headline text-lg font-semibold text-primary">
           <HeartPulse className="h-6 w-6" />
-          <span>TotoHealth</span>
+          <span className="text-sm">Smart Toilet for Real time Health Monitoring</span>
         </Link>
       </div>
       <div className="flex-1 overflow-y-auto">

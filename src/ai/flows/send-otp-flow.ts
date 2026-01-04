@@ -49,7 +49,7 @@ const sendOtpFlow = ai.defineFlow(
     const mailOptions = {
       from: process.env.EMAIL_SERVER_USER,
       to: email,
-      subject: 'Your TotoHealth Verification Code',
+      subject: 'Your Smart Toilet Verification Code',
       text: text,
       html: html,
     };
