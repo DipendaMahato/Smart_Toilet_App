@@ -61,7 +61,7 @@ export async function sendOtpAction(email: string) {
     const mailOptions = {
       from: process.env.EMAIL_SERVER_USER,
       to: email,
-      subject: 'Your Verification Code',
+      subject: 'Your OTP Code',
       text: `Your OTP is: ${otp}`,
     };
     
@@ -73,6 +73,6 @@ export async function sendOtpAction(email: string) {
     console.error('Error in sendOtpAction:', error);
     // Return a more detailed error for debugging
     const errorMessage = error instanceof Error ? error.message : String(error);
-    return { success: false, error: `Failed to send OTP: ${errorMessage}` };
+    return { success: false, error: `Failed to send OTP. Please check server logs for details.` };
   }
 }
