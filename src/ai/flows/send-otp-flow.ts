@@ -36,7 +36,9 @@ const sendOtpFlow = ai.defineFlow(
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true, // use SSL
       auth: {
         user: process.env.EMAIL_SERVER_USER,
         pass: process.env.EMAIL_SERVER_PASSWORD,
