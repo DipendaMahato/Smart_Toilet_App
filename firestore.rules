@@ -1,0 +1,140 @@
+/**
+ * Core Philosophy: This ruleset enforces a strict user-ownership model where all
+ * data is private and accessible only to the authenticated user who owns it.
+ * This ensures high security and privacy for sensitive health information.
+ *
+ * Data Structure: All user-specific data is organized hierarchically under a
+ * top-level 'users' collection. Each user's data, including their profile,
+ * health insights, sensor data, and emergency alerts, is stored in dedicated
+ * subcollections under their unique user ID path (e.g., /users/{userId}/...).
+ *
+ * Key Security Decisions:
+ * - Strict Ownership: A user can only access documents within their own data
+ *   tree (/users/{their_own_userId}). Cross-user access is strictly forbidden.
+ * - No Public Data: There are no publicly readable collections. All access
+ *   requires authentication.
+ * - User Listing Disabled: The top-level '/users' collection is not listable,
+ *   preventing enumeration of all users in the application.
+ * - Prototyping Flexibility: These rules focus on authorization (who can access
+ *   what) and do not enforce a strict data schema. This allows for rapid
+ *   development and iteration on the data model without needing to update
+ *   security rules for every field change.
+ *
+ * Denormalization for Authorization: The subcollection documents (HealthInsight,
+ * SensorData, EmergencyAlert) contain a denormalized `userId` field. This
+ * allows for fast and efficient security rules that validate ownership directly
+ * from the document's data, without requiring costly `get()` calls to parent
+ * documents.
+ *
+ * Structural Segregation: Each type of user data (profile, sensorData, etc.)
+ * is stored in its own dedicated subcollection. This creates a clear and
+ * organized structure, making it easy to reason about and secure each data type
+ * independently.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ----------------------------------------------------------------------
+    // Helper Functions
+    // ----------------------------------------------------------------------
+
+    /**
+     * Checks if the user is authenticated.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * Checks if the requesting user's UID matches the userId from the path.
+     * This is the primary function for enforcing user ownership.
+     */
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    /**
+     * Ensures an operation is performed by the document owner and that the
+     * document already exists. Critical for safe updates and deletes.
+     */
+    function isExistingOwner(userId) {
+      return isOwner(userId) && resource != null;
+    }
+
+    // ----------------------------------------------------------------------
+    // User Data Root
+    // ----------------------------------------------------------------------
+
+    match /users/{userId} {
+
+      /**
+       * @description Secures a user's profile document. Only the owner can
+       *   create, view, and manage their own profile.
+       * @path /users/{userId}/profile/{profileId}
+       * @allow User 'abc' (create) their own profile with `{ "id": "abc", ... }`.
+       * @deny User 'xyz' (get) the profile of user 'abc'.
+       * @principle Restricts access to a user's own data tree and validates
+       *   relational integrity on creation and updates.
+       */
+      match /profile/{profileId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.id == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+        allow delete: if isExistingOwner(userId);
+      }
+
+      /**
+       * @description Secures a user's private health insights. Only the owner can
+       *   manage and view their insights.
+       * @path /users/{userId}/healthInsights/{healthInsightId}
+       * @allow User 'abc' (create) a health insight with `{ "userId": "abc", ... }`.
+       * @deny User 'abc' (create) a health insight with `{ "userId": "xyz", ... }`.
+       * @principle Enforces strict document ownership via a denormalized `userId`
+       *   field, ensuring data integrity within the user's private space.
+       */
+      match /healthInsights/{healthInsightId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+
+      /**
+       * @description Secures a user's private sensor data records. Only the
+       *   owner can manage and view their sensor data.
+       * @path /users/{userId}/sensorData/{sensorDataId}
+       * @allow User 'abc' (list) their own sensor data records.
+       * @deny User 'xyz' (delete) a sensor data record belonging to user 'abc'.
+       * @principle Enforces strict document ownership via a denormalized `userId`
+       *   field, ensuring data integrity within the user's private space.
+       */
+      match /sensorData/{sensorDataId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+
+      /**
+       * @description Secures a user's private emergency alerts. Only the owner
+       *   can manage and view their alerts.
+       * @path /users/{userId}/emergencyAlerts/{emergencyAlertId}
+       * @allow User 'abc' (get) one of their own emergency alerts.
+       * @deny Any unauthenticated user (get) any alert.
+       * @principle Enforces strict document ownership via a denormalized `userId`
+       *   field, ensuring data integrity within the user's private space.
+       */
+      match /emergencyAlerts/{emergencyAlertId} {
+        allow get: if isOwner(userId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && request.resource.data.userId == userId;
+        allow update: if isExistingOwner(userId) && request.resource.data.userId == resource.data.userId;
+        allow delete: if isExistingOwner(userId);
+      }
+    }
+  }
+}
