@@ -9,6 +9,12 @@ import {
   Settings,
   LogOut,
   HeartPulse,
+  RadioTower,
+  BrainCircuit,
+  FlaskConical,
+  Activity,
+  Heart,
+  Stethoscope,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -19,6 +25,12 @@ import { mockMedicalProfile } from "@/lib/data";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
+  { href: "/dashboard/live-sensor-data", icon: RadioTower, label: "Live Sensor Data" },
+  { href: "/dashboard/ai-process-tracker", icon: BrainCircuit, label: "AI Process Tracker" },
+  { href: "/dashboard/diagnostics", icon: FlaskConical, label: "Diagnostics" },
+  { href: "/dashboard/vitals-trends", icon: Activity, label: "Vitals & Trends" },
+  { href: "/dashboard/health-status", icon: Heart, label: "Health Status" },
+  { href: "/dashboard/clinical-care", icon: Stethoscope, label: "Clinical Care" },
   { href: "/dashboard/insights", icon: Bot, label: "AI Insights" },
   { href: "/dashboard/profile", icon: User, label: "Medical Profile" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
@@ -71,7 +83,7 @@ export default function AppSidebar() {
           </div>
           <Link href="/login" className="ml-auto">
             <Button variant="ghost" size="icon" aria-label="Logout">
-                <LogOut className="h-5 w-5" />
+              <LogOut className="h-5 w-5" />
             </Button>
           </Link>
         </div>

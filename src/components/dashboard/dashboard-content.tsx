@@ -1,73 +1,89 @@
+'use client';
 
-"use client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Activity,
+  Heart,
+  FlaskConical,
+  BrainCircuit,
+  RadioTower,
+  Stethoscope,
+  ArrowRight,
+} from 'lucide-react';
+import Link from 'next/link';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { realTimeHealthMetrics, mockMedicalProfile } from "@/lib/data";
-import { RealTimeChart } from "@/components/dashboard/real-time-chart";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+const subDashboards = [
+  {
+    title: 'Live Sensor Data',
+    description: 'Real-time IoT sensor readings, device status, and active user detection.',
+    icon: RadioTower,
+    href: '/dashboard/live-sensor-data',
+  },
+  {
+    title: 'AI Process Tracker',
+    description: 'Visualize AI stages: data capture, preprocessing, inference, and validation.',
+    icon: BrainCircuit,
+    href: '/dashboard/ai-process-tracker',
+  },
+  {
+    title: 'Urine & Stool Diagnostics',
+    description: 'Diagnostic dashboards for urine and stool analysis, classifications, and risk indicators.',
+    icon: FlaskConical,
+    href: '/dashboard/diagnostics',
+  },
+  {
+    title: 'Health Vitals & Trends',
+    description: 'Analytical views of health vitals with daily, weekly, and long-term trend graphs.',
+    icon: Activity,
+    href: '/dashboard/vitals-trends',
+  },
+  {
+    title: 'Overall Health Status',
+    description: 'Consolidated summary with AI-derived health scores, conclusions, and risk levels.',
+    icon: Heart,
+    href: '/dashboard/health-status',
+  },
+  {
+    title: 'Clinical Care & Doctor Support',
+    description: 'Clinical support screens with doctor profiles, consultations, and hospital facilities.',
+    icon: Stethoscope,
+    href: '/dashboard/clinical-care',
+  },
+];
+
 
 export function DashboardContent() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-headline font-bold">Good morning, {mockMedicalProfile.name.split(' ')[0]}!</h1>
-        <p className="text-muted-foreground">Here's your real-time health overview.</p>
+        <h1 className="text-3xl font-headline font-bold">Health Command Center</h1>
+        <p className="text-muted-foreground">
+          Select a dashboard below to explore your health data in detail.
+        </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-        {realTimeHealthMetrics.map((metric) => (
-          <Card key={metric.name}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{metric.name}</CardTitle>
-              <metric.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{metric.value}</div>
-              <p className="text-xs text-muted-foreground">
-                Updated just now
-              </p>
-            </CardContent>
-          </Card>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {subDashboards.map((dashboard) => (
+          <Link href={dashboard.href} key={dashboard.title}>
+            <Card className="h-full hover:border-primary hover:bg-muted/50 transition-all">
+                <CardHeader>
+                  <div className="flex items-center gap-4">
+                    <dashboard.icon className="h-8 w-8 text-primary" />
+                    <CardTitle className="font-headline text-xl">{dashboard.title}</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>{dashboard.description}</CardDescription>
+                </CardContent>
+            </Card>
+          </Link>
         ))}
-      </div>
-
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="lg:col-span-4">
-          <CardHeader>
-            <CardTitle className="font-headline">Health Trends</CardTitle>
-            <CardDescription>Your key vitals over the last 7 days.</CardDescription>
-          </CardHeader>
-          <CardContent className="pl-2">
-            <RealTimeChart />
-          </CardContent>
-        </Card>
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle className="font-headline">AI Health Insights</CardTitle>
-            <CardDescription>
-              Personalized advice based on your latest data.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-col items-start gap-4">
-            <p className="text-sm text-muted-foreground">
-              Our AI has analyzed your recent health data and generated new insights for you.
-              Review them to stay on top of your health.
-            </p>
-            <div className="flex items-center justify-center p-6 bg-muted rounded-lg w-full">
-              <div className="text-center">
-                <p className="text-4xl font-bold text-primary">3</p>
-                <p className="text-sm font-medium">New Insights</p>
-              </div>
-            </div>
-            <Link href="/dashboard/insights" className="w-full">
-              <Button className="w-full">
-                View My Insights <ArrowRight className="ml-2" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );

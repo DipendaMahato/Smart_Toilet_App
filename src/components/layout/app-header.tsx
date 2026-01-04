@@ -11,6 +11,12 @@ import {
   User,
   Settings,
   HeartPulse,
+  RadioTower,
+  BrainCircuit,
+  FlaskConical,
+  Activity,
+  Heart,
+  Stethoscope,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -29,15 +35,30 @@ import { mockMedicalProfile } from "@/lib/data";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
+  { href: "/dashboard/live-sensor-data", icon: RadioTower, label: "Live Sensor Data" },
+  { href: "/dashboard/ai-process-tracker", icon: BrainCircuit, label: "AI Process Tracker" },
+  { href: "/dashboard/diagnostics", icon: FlaskConical, label: "Diagnostics" },
+  { href: "/dashboard/vitals-trends", icon: Activity, label: "Vitals & Trends" },
+  { href: "/dashboard/health-status", icon: Heart, label: "Health Status" },
+  { href: "/dashboard/clinical-care", icon: Stethoscope, label: "Clinical Care" },
   { href: "/dashboard/insights", icon: Bot, label: "AI Insights" },
   { href: "/dashboard/profile", icon: User, label: "Medical Profile" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
 
 function getPageTitle(pathname: string) {
-    if (pathname === '/dashboard') return 'Dashboard';
-    const matchedItem = navItems.find(item => pathname.startsWith(item.href));
-    return matchedItem ? matchedItem.label : 'Dashboard';
+    const matchedItem = navItems.find(item => pathname === item.href);
+    if (matchedItem) return matchedItem.label;
+    if (pathname.startsWith('/dashboard')) {
+        const parentPath = '/dashboard';
+        const parentItem = navItems.find(item => item.href === parentPath);
+        if (parentItem && pathname !== parentPath) {
+             const subItem = navItems.find(item => pathname.startsWith(item.href) && item.href !== parentPath);
+             if (subItem) return subItem.label;
+        }
+        return parentItem?.label ?? 'Dashboard';
+    }
+    return 'Dashboard';
 }
 
 export default function AppHeader() {
