@@ -4,9 +4,10 @@
 
 import { generateHealthInsights } from '@/ai/flows/generate-health-insights';
 import { refineInsightsWithReasoning } from '@/ai/flows/refine-insights-with-reasoning';
-import { sendOtp } from '@/ai/flows/send-otp-flow';
+import { generateOtp } from '@/ai/flows/send-otp-flow';
 import { mockMedicalProfile, mockToiletSensorData } from '@/lib/data';
 import { z } from 'zod';
+import nodemailer from 'nodemailer';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -45,15 +46,33 @@ export async function getAiInsights() {
 
 export async function sendOtpAction(email: string) {
   try {
-    const result = await sendOtp({ email });
-    if (result.success) {
-      // In a real app, you'd save the OTP to a database with an expiry
-      // For this prototype, we'll return it to the client to simulate verification
-      return { success: true, otp: result.otp };
-    }
-    return { success: false, error: "Failed to send OTP. Please try again." };
+    const { otp } = await generateOtp();
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_SERVER_USER,
+        pass: process.env.EMAIL_SERVER_PASSWORD,
+      },
+    });
+
+    const text = `Your Smart Toilet verification code is ${otp}. Please enter this code to securely verify your account. This OTP is valid for 5 minutes. Do not share it with anyone. Dipendra Mahato`;
+    const html = `<p>Your Smart Toilet verification code is <b>${otp}</b>. Please enter this code to securely verify your account. This OTP is valid for 5 minutes. Do not share it with anyone.</p><p>Dipendra Mahato</p>`;
+
+    const mailOptions = {
+      from: process.env.EMAIL_SERVER_USER,
+      to: email,
+      subject: 'Your Smart Toilet for Real time Health Monitoring Verification Code',
+      text: text,
+      html: html,
+    };
+    
+    await transporter.sendMail(mailOptions);
+    console.log('OTP email sent to:', email);
+    return { success: true, otp: otp };
+
   } catch (error) {
     console.error('Error in sendOtpAction:', error);
-    return { success: false, error: 'An unexpected error occurred.' };
+    return { success: false, error: 'Failed to send OTP. Please check server logs for details.' };
   }
 }
