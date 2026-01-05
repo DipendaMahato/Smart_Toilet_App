@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
@@ -29,7 +30,7 @@ export function AiAssistantChat() {
   }, [messages, loading]);
   
   useEffect(() => {
-    setMessages([{ role: 'model', content: "Hello! I'm Smart Toilet Assistance your AI health assistant. How can I help you today?" }]);
+    setMessages([{ role: 'model', content: "Hello! I’m Smart Toilet Assistant, here to help you with your health insights. How can I assist you today? 🩺📊" }]);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
