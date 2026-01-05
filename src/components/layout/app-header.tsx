@@ -49,13 +49,25 @@ const navItems = [
 ];
 
 function getPageTitle(pathname: string) {
-    const matchedItem = navItems.find(item => pathname === item.href);
+    const navItemsForTitle = [
+      { href: "/dashboard", icon: Home, label: "Dashboard" },
+      { href: "/dashboard/live-sensor-data", icon: RadioTower, label: "Live Sensor Data" },
+      { href: "/dashboard/ai-process-tracker", icon: BrainCircuit, label: "AI Process Tracker" },
+      { href: "/dashboard/diagnostics", icon: FlaskConical, label: "Diagnostics" },
+      { href: "/dashboard/vitals-trends", icon: Activity, label: "Vitals & Trends" },
+      { href: "/dashboard/health-status", icon: Heart, label: "Health Status" },
+      { href: "/dashboard/clinical-care", icon: Stethoscope, label: "Clinical Care" },
+      { href: "/dashboard/insights", icon: Bot, label: "Real-Time Health Insights" },
+      { href: "/dashboard/profile", icon: User, label: "Medical Profile" },
+      { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+    ];
+    const matchedItem = navItemsForTitle.find(item => pathname === item.href);
     if (matchedItem) return matchedItem.label;
     if (pathname.startsWith('/dashboard')) {
         const parentPath = '/dashboard';
-        const parentItem = navItems.find(item => item.href === parentPath);
+        const parentItem = navItemsForTitle.find(item => item.href === parentPath);
         if (parentItem && pathname !== parentPath) {
-             const subItem = navItems.find(item => pathname.startsWith(item.href) && item.href !== parentPath);
+             const subItem = navItemsForTitle.find(item => pathname.startsWith(item.href) && item.href !== parentPath);
              if (subItem) return subItem.label;
         }
         return parentItem?.label ?? 'Dashboard';
