@@ -2,9 +2,6 @@
 
 import {
   Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import {
   Activity,
@@ -59,8 +56,8 @@ const subDashboards = [
 
 export function DashboardContent() {
   return (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-8 animate-fade-in">
+      <div style={{ animationDelay: '200ms', animationFillMode: 'backwards' }} className="animate-slide-up">
         <h1 className="text-3xl font-headline font-bold">Health Command Center</h1>
         <p className="text-muted-foreground">
           Select a dashboard below to explore your health data in detail.
@@ -68,19 +65,23 @@ export function DashboardContent() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {subDashboards.map((dashboard) => (
-          <Link href={dashboard.href} key={dashboard.title} className="group">
-            <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:border-primary/50 hover:-translate-y-1">
-              <CardHeader className="p-6">
+        {subDashboards.map((dashboard, index) => (
+          <Link href={dashboard.href} key={dashboard.title} className="group" style={{ animationDelay: `${300 + index * 100}ms`, animationFillMode: 'backwards' }}>
+            <Card className="h-full rounded-2xl overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 animate-slide-up">
+              <div className="p-6">
                 <div className="flex items-start justify-between gap-4">
-                    <div className="space-y-2">
-                        <dashboard.icon className="h-8 w-8 text-primary transition-transform duration-300 group-hover:scale-110" />
-                        <CardTitle className="font-headline text-xl">{dashboard.title}</CardTitle>
-                        <CardDescription>{dashboard.description}</CardDescription>
+                    <div className="space-y-3">
+                        <div className="p-3 bg-primary/10 rounded-xl w-fit">
+                          <dashboard.icon className="h-7 w-7 text-primary transition-transform duration-300 group-hover:scale-110" />
+                        </div>
+                        <h2 className="font-headline text-xl font-semibold">{dashboard.title}</h2>
+                        <p className="text-muted-foreground text-sm">{dashboard.description}</p>
                     </div>
-                     <ArrowRight className="h-5 w-5 text-muted-foreground transition-all duration-300 group-hover:text-primary group-hover:translate-x-1" />
                 </div>
-              </CardHeader>
+                 <div className="mt-6 flex items-center justify-end">
+                    <ArrowRight className="h-5 w-5 text-muted-foreground transition-all duration-300 group-hover:text-primary group-hover:translate-x-1" />
+                </div>
+              </div>
             </Card>
           </Link>
         ))}

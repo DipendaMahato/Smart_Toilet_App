@@ -9,6 +9,14 @@ export default {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`,
+        sm: `calc(var(--radius) - 4px)`,
+        xl: `calc(var(--radius) + 4px)`,
+        '2xl': `calc(var(--radius) + 10px)`,
+        '3xl': `calc(var(--radius) + 16px)`,
+      },
       fontFamily: {
         body: ['Inter', 'sans-serif'],
         headline: ['"Space Grotesk"', 'sans-serif'],
@@ -48,6 +56,12 @@ export default {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        status: {
+          green: 'hsl(var(--status-green))',
+          yellow: 'hsl(var(--status-yellow))',
+          orange: 'hsl(var(--status-orange))',
+          red: 'hsl(var(--status-red))',
+        },
         chart: {
           '1': 'hsl(var(--chart-1))',
           '2': 'hsl(var(--chart-2))',
@@ -55,11 +69,6 @@ export default {
           '4': 'hsl(var(--chart-4))',
           '5': 'hsl(var(--chart-5))',
         },
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
       },
       keyframes: {
         'accordion-down': {
@@ -78,10 +87,20 @@ export default {
             height: '0',
           },
         },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        'slide-up': {
+            from: { transform: 'translateY(20px)', opacity: '0'},
+            to: { transform: 'translateY(0)', opacity: '1'},
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fade-in 0.5s ease-out',
+        'slide-up': 'slide-up 0.5s ease-out forwards',
       },
     },
   },

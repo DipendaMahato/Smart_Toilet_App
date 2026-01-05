@@ -53,7 +53,7 @@ export function SettingsTabs() {
       </TabsList>
 
       <TabsContent value="account">
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="font-headline">Account Security</CardTitle>
             <CardDescription>
@@ -69,14 +69,14 @@ export function SettingsTabs() {
               <Label htmlFor="new-password">New Password</Label>
               <Input id="new-password" type="password" />
             </div>
-            <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+            <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base flex items-center gap-2"><ShieldCheck/> Biometric Login</Label>
                     <p className="text-sm text-muted-foreground">Use your fingerprint or face to log in.</p>
                 </div>
                 {isClient && <Switch id="biometric" checked={biometric} onCheckedChange={setBiometric} />}
             </div>
-            <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+            <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base flex items-center gap-2"><Lock/> App Lock</Label>
                     <p className="text-sm text-muted-foreground">Require authentication every time you open the app.</p>
@@ -91,7 +91,7 @@ export function SettingsTabs() {
       </TabsContent>
 
       <TabsContent value="preferences">
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="font-headline">App Preferences</CardTitle>
             <CardDescription>
@@ -145,7 +145,7 @@ export function SettingsTabs() {
       </TabsContent>
 
       <TabsContent value="notifications">
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="font-headline">Notifications</CardTitle>
             <CardDescription>
@@ -153,21 +153,21 @@ export function SettingsTabs() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-             <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+             <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
-                    <Label className="text-base flex items-center gap-2"><Bell/> Emergency Alerts</Label>
+                    <Label className="text-base flex items-center gap-2"><Bell className="text-status-red"/> Emergency Alerts</Label>
                     <p className="text-sm text-muted-foreground">Receive critical health alerts immediately.</p>
                 </div>
                 {isClient && <Switch id="emergency-alerts" checked={emergencyAlerts} onCheckedChange={setEmergencyAlerts}/>}
             </div>
-            <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+            <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base">New Insight Alerts</Label>
                     <p className="text-sm text-muted-foreground">Get notified when new AI insights are ready.</p>
                 </div>
                 {isClient && <Switch id="insight-alerts" checked={insightAlerts} onCheckedChange={setInsightAlerts} />}
             </div>
-             <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+             <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base">Weekly Summary</Label>
                     <p className="text-sm text-muted-foreground">Receive a summary of your health trends every week.</p>
@@ -182,7 +182,7 @@ export function SettingsTabs() {
       </TabsContent>
 
        <TabsContent value="data">
-        <Card>
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="font-headline">Data &amp; AI</CardTitle>
             <CardDescription>
@@ -190,14 +190,14 @@ export function SettingsTabs() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+            <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base flex items-center gap-2"><Wifi/> Wi-Fi Sync</Label>
                     <p className="text-sm text-muted-foreground">Sync data automatically over Wi-Fi.</p>
                 </div>
                 {isClient && <Switch id="wifi-sync" checked={wifiSync} onCheckedChange={setWifiSync}/>}
             </div>
-             <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+             <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base flex items-center gap-2"><Bluetooth/> Bluetooth Sync</Label>
                     <p className="text-sm text-muted-foreground">Allow data sync via Bluetooth when Wi-Fi is unavailable.</p>

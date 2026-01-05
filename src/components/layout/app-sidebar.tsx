@@ -58,14 +58,14 @@ export default function AppSidebar() {
         </Link>
       </div>
       <div className="flex-1 overflow-y-auto">
-        <nav className="flex flex-col gap-2 p-4">
+        <nav className="flex flex-col gap-1 p-4">
           {navItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary hover:bg-muted",
-                pathname === item.href && "bg-muted text-primary font-medium"
+                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-muted-foreground transition-all hover:text-primary hover:bg-primary/10",
+                pathname === item.href && "bg-primary/10 text-primary font-medium"
               )}
             >
               <item.icon className="h-5 w-5" />
