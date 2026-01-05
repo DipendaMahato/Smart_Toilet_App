@@ -2,7 +2,6 @@
 
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -21,37 +20,37 @@ import Link from 'next/link';
 const subDashboards = [
   {
     title: 'Live Sensor Data',
-    description: 'Real-time IoT sensor readings, device status, and active user detection.',
+    description: 'Real-time IoT sensor readings and device status.',
     icon: RadioTower,
     href: '/dashboard/live-sensor-data',
   },
   {
     title: 'AI Process Tracker',
-    description: 'Visualize AI stages: data capture, preprocessing, inference, and validation.',
+    description: 'Visualize AI stages from data capture to insights.',
     icon: BrainCircuit,
     href: '/dashboard/ai-process-tracker',
   },
   {
     title: 'Urine & Stool Diagnostics',
-    description: 'Diagnostic dashboards for urine and stool analysis, classifications, and risk indicators.',
+    description: 'Analysis, classifications, and risk indicators.',
     icon: FlaskConical,
     href: '/dashboard/diagnostics',
   },
   {
     title: 'Health Vitals & Trends',
-    description: 'Analytical views of health vitals with daily, weekly, and long-term trend graphs.',
+    description: 'Daily, weekly, and long-term trend graphs.',
     icon: Activity,
     href: '/dashboard/vitals-trends',
   },
   {
     title: 'Overall Health Status',
-    description: 'Consolidated summary with AI-derived health scores, conclusions, and risk levels.',
+    description: 'AI-derived health scores and conclusions.',
     icon: Heart,
     href: '/dashboard/health-status',
   },
   {
     title: 'Clinical Care & Doctor Support',
-    description: 'Clinical support screens with doctor profiles, consultations, and hospital facilities.',
+    description: 'Doctor profiles, consultations, and facilities.',
     icon: Stethoscope,
     href: '/dashboard/clinical-care',
   },
@@ -70,14 +69,18 @@ export function DashboardContent() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {subDashboards.map((dashboard) => (
-          <Link href={dashboard.href} key={dashboard.title}>
-            <Card className="h-full hover:border-primary hover:bg-muted/50 transition-all flex items-center justify-center p-6">
-                <CardHeader>
-                  <div className="flex flex-col items-center justify-center gap-4 text-center">
-                    <dashboard.icon className="h-10 w-10 text-primary" />
-                    <CardTitle className="font-headline text-xl">{dashboard.title}</CardTitle>
-                  </div>
-                </CardHeader>
+          <Link href={dashboard.href} key={dashboard.title} className="group">
+            <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-lg hover:border-primary/50 hover:-translate-y-1">
+              <CardHeader className="p-6">
+                <div className="flex items-start justify-between gap-4">
+                    <div className="space-y-2">
+                        <dashboard.icon className="h-8 w-8 text-primary transition-transform duration-300 group-hover:scale-110" />
+                        <CardTitle className="font-headline text-xl">{dashboard.title}</CardTitle>
+                        <CardDescription>{dashboard.description}</CardDescription>
+                    </div>
+                     <ArrowRight className="h-5 w-5 text-muted-foreground transition-all duration-300 group-hover:text-primary group-hover:translate-x-1" />
+                </div>
+              </CardHeader>
             </Card>
           </Link>
         ))}
