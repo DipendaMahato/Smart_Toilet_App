@@ -62,10 +62,13 @@ export function LoginForm() {
     signInWithEmailAndPassword(auth, values.email, values.password)
       .catch((error: any) => {
         let description = "An unexpected error occurred.";
+        // This is an expected error when credentials are wrong
         if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
           description = "Invalid email or password. Please try again.";
+        } else {
+          // Log other, unexpected errors to the console
+          console.error("Login failed:", error);
         }
-        console.error("Login failed:", error);
         toast({
           variant: "destructive",
           title: "Login Failed",
