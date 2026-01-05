@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, Unsubscribe } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -39,25 +39,42 @@ export function LoginForm() {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof LoginSchema>) {
-    setLoading(true);
-    try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
-      router.push("/dashboard");
-    } catch (error: any) {
-      console.error("Login failed:", error);
-      let description = "An unexpected error occurred.";
-      if (error.code === 'auth/invalid-credential') {
-        description = "Invalid email or password. Please try again.";
-      }
-      toast({
-        variant: "destructive",
-        title: "Login Failed",
-        description: description,
+  useEffect(() => {
+    let unsubscribe: Unsubscribe;
+    if (auth) {
+      // Handle successful login redirection globally
+      unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          router.push("/dashboard");
+        }
       });
-    } finally {
-      setLoading(false);
     }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [auth, router]);
+
+  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+    if (!auth) return;
+    setLoading(true);
+
+    // Use non-blocking sign-in and handle errors in the catch block
+    signInWithEmailAndPassword(auth, values.email, values.password)
+      .catch((error: any) => {
+        let description = "An unexpected error occurred.";
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          description = "Invalid email or password. Please try again.";
+        }
+        console.error("Login failed:", error);
+        toast({
+          variant: "destructive",
+          title: "Login Failed",
+          description: description,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
