@@ -126,15 +126,15 @@ export function ProfileForm() {
       });
 
       const profileData = {
+        id: user.uid,
         name: data.name,
         email: user.email,
         photoURL: photoURL,
-        dateOfBirth: data.dateOfBirth ? Timestamp.fromDate(data.dateOfBirth) : null,
         gender: data.gender,
         bloodGroup: data.bloodGroup,
         height: data.height,
         weight: data.weight,
-        id: user.uid,
+        dateOfBirth: data.dateOfBirth ? Timestamp.fromDate(data.dateOfBirth) : null,
       };
 
       await setDoc(profileRef, profileData, { merge: true });
@@ -334,3 +334,5 @@ export function ProfileForm() {
     </Form>
   );
 }
+
+    
