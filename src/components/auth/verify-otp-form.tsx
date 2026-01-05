@@ -23,7 +23,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth, useFirestore } from "@/firebase";
 import type { RegisterSchema } from "@/lib/schemas";
-import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
+import { setDoc } from 'firebase/firestore';
 
 const VerifyOtpSchema = z.object({
   otp: z.string().min(6, { message: "OTP must be 6 digits." }).max(6),
@@ -90,11 +90,11 @@ export function VerifyOtpForm() {
             name: userDetails.name,
             email: userDetails.email,
             phoneNumber: userDetails.phone,
-            // dateOfBirth is not collected at registration, so it's not included here
+            photoURL: userCredential.user.photoURL,
         };
 
         const profileRef = doc(firestore, "users", userCredential.user.uid);
-        setDocumentNonBlocking(profileRef, profileData, { merge: true });
+        await setDoc(profileRef, profileData, { merge: true });
 
         toast({
           title: "Success!",

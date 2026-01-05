@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { AppLogo } from "../logo";
 
 const navItems = [
@@ -140,6 +140,7 @@ export default function AppHeader() {
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Avatar className="h-8 w-8">
+                  <AvatarImage src={user?.photoURL || undefined} alt="User avatar" />
                   <AvatarFallback>
                     {user?.displayName?.charAt(0) || <UserCircle className="h-full w-full text-muted-foreground" />}
                   </AvatarFallback>

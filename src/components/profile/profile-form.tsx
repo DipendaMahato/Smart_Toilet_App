@@ -7,9 +7,10 @@ import * as z from "zod";
 import { useState, useRef, useEffect } from "react";
 import { CalendarIcon, UserCircle } from "lucide-react";
 import { format } from "date-fns";
-import { useFirestore, useUser, useMemoFirebase } from "@/firebase";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { Timestamp } from "firebase/firestore";
+import { useFirestore, useUser, useMemoFirebase, useStorage } from "@/firebase";
+import { doc, setDoc, getDoc, Timestamp } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { updateProfile } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -34,11 +35,13 @@ type ProfileFormValues = z.infer<typeof ProfileSchema>;
 export function ProfileForm() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { user, isUserLoading } = useUser();
   const firestore = useFirestore();
+  const storage = useStorage();
 
   const profileRef = useMemoFirebase(() => {
     if (!firestore || !user?.uid) return null;
@@ -59,6 +62,9 @@ export function ProfileForm() {
   });
 
   useEffect(() => {
+    if (user) {
+        setAvatarPreview(user.photoURL);
+    }
     if (user && !isUserLoading && profileRef) {
         const fetchProfile = async () => {
             try {
@@ -73,6 +79,9 @@ export function ProfileForm() {
                         height: data.height || 0,
                         weight: data.weight || 0,
                     });
+                    if (data.photoURL) {
+                        setAvatarPreview(data.photoURL);
+                    }
                 } else {
                      form.reset({
                         name: user.displayName || "",
@@ -92,24 +101,40 @@ export function ProfileForm() {
   }, [user, isUserLoading, form, profileRef, toast]);
 
   async function onSubmit(data: ProfileFormValues) {
-    if (!profileRef || !user) {
+    if (!profileRef || !user || !storage) {
         toast({
             variant: "destructive",
             title: "Error",
-            description: "User not authenticated. Unable to save profile.",
+            description: "User not authenticated or storage service unavailable.",
         });
         return;
     }
     setLoading(true);
     
     try {
-      const { avatar, ...restData } = data;
-      
+      let photoURL = user.photoURL;
+
+      if (avatarFile) {
+        const storageRef = ref(storage, `avatars/${user.uid}/${avatarFile.name}`);
+        const uploadResult = await uploadBytes(storageRef, avatarFile);
+        photoURL = await getDownloadURL(uploadResult.ref);
+      }
+
+      await updateProfile(user, {
+          displayName: data.name,
+          photoURL: photoURL,
+      });
+
       const profileData = {
-        ...restData,
-        id: user.uid,
+        name: data.name,
         email: user.email,
+        photoURL: photoURL,
         dateOfBirth: data.dateOfBirth ? Timestamp.fromDate(data.dateOfBirth) : null,
+        gender: data.gender,
+        bloodGroup: data.bloodGroup,
+        height: data.height,
+        weight: data.weight,
+        id: user.uid,
       };
 
       await setDoc(profileRef, profileData, { merge: true });
@@ -133,6 +158,7 @@ export function ProfileForm() {
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
+      setAvatarFile(file);
       setAvatarPreview(URL.createObjectURL(file));
     }
   };
@@ -153,7 +179,7 @@ export function ProfileForm() {
                     <FormControl>
                         <div className="flex items-center gap-4">
                             <Avatar className="h-20 w-20">
-                                <AvatarImage src={avatarPreview || user?.photoURL || undefined} alt="User avatar"/>
+                                <AvatarImage src={avatarPreview || undefined} alt="User avatar"/>
                                 <AvatarFallback>
                                     {user?.displayName?.charAt(0) || <UserCircle className="h-full w-full text-muted-foreground" />}
                                 </AvatarFallback>
@@ -305,5 +331,3 @@ export function ProfileForm() {
     </Form>
   );
 }
-
-    

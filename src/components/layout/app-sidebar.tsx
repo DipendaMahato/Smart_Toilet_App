@@ -21,7 +21,7 @@ import { useUser, useAuth } from "@/firebase";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { AppLogo } from "../logo";
 
 const navItems = [
@@ -77,6 +77,7 @@ export default function AppSidebar() {
       <div className="mt-auto border-t p-4">
         <div className="flex items-center gap-4">
             <Avatar>
+                <AvatarImage src={user?.photoURL || undefined} alt="User avatar" />
                 <AvatarFallback>
                   {user?.displayName?.charAt(0) || <UserCircle className="h-10 w-10 text-muted-foreground" />}
                 </AvatarFallback>
