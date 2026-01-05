@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -68,12 +69,12 @@ export function HealthReport() {
                             <p><strong>Transparency:</strong> Clear</p>
                             <p><strong>Est. Volume:</strong> 350ml</p>
                             <p><strong>Flow Rate:</strong> 15 ml/s</p>
-                            <p><strong>Hydration:</strong> <Badge variant="secondary">Optimal</Badge></p>
+                            <div className="flex items-center gap-1"><strong>Hydration:</strong> <Badge variant="secondary">Optimal</Badge></div>
                             <p><strong>pH Range:</strong> 6.8</p>
-                            <p><strong>Protein:</strong> <Badge variant="destructive">Trace</Badge></p>
-                            <p><strong>Glucose:</strong> <Badge>Normal</Badge></p>
-                            <p><strong>Blood Trace:</strong> <Badge>None</Badge></p>
-                            <p><strong>Ketones:</strong> <Badge>None</Badge></p>
+                            <div className="flex items-center gap-1"><strong>Protein:</strong> <Badge variant="destructive">Trace</Badge></div>
+                            <div className="flex items-center gap-1"><strong>Glucose:</strong> <Badge>Normal</Badge></div>
+                            <div className="flex items-center gap-1"><strong>Blood Trace:</strong> <Badge>None</Badge></div>
+                            <div className="flex items-center gap-1"><strong>Ketones:</strong> <Badge>None</Badge></div>
                         </div>
                     </ReportSection>
 
@@ -83,10 +84,10 @@ export function HealthReport() {
                             <p><strong>Color:</strong> Brown</p>
                             <p><strong>Consistency:</strong> Smooth</p>
                             <p><strong>Texture:</strong> Normal</p>
-                            <p><strong>Digestive Score:</strong> <Badge>8.5/10</Badge></p>
-                            <p><strong>Fiber Intake:</strong> <Badge variant="secondary">Good</Badge></p>
-                            <p><strong>Constipation Flag:</strong> <Badge>No</Badge></p>
-                            <p><strong>Diarrhea Flag:</strong> <Badge>No</Badge></p>
+                            <div className="flex items-center gap-1"><strong>Digestive Score:</strong> <Badge>8.5/10</Badge></div>
+                            <div className="flex items-center gap-1"><strong>Fiber Intake:</strong> <Badge variant="secondary">Good</Badge></div>
+                            <div className="flex items-center gap-1"><strong>Constipation Flag:</strong> <Badge>No</Badge></div>
+                            <div className="flex items-center gap-1"><strong>Diarrhea Flag:</strong> <Badge>No</Badge></div>
                         </div>
                     </ReportSection>
 
@@ -120,10 +121,10 @@ export function HealthReport() {
                            <CardTitle className="font-headline flex items-center gap-3"><ShieldCheck/> Privacy & Security</CardTitle>
                         </CardHeader>
                         <CardContent className="text-sm space-y-2 text-muted-foreground">
-                            <p className="flex items-center gap-2"><strong>Encryption:</strong> <Badge>Active (AES-256)</Badge></p>
+                            <div className="flex items-center gap-2"><strong>Encryption:</strong> <Badge>Active (AES-256)</Badge></div>
                             <p><strong>Storage:</strong> Secure Cloud</p>
                             <p><strong>User Consent:</strong> Granted</p>
-                            <p><strong>Doctor Sharing:</strong> <Badge variant="destructive">Disabled</Badge></p>
+                            <div className="flex items-center gap-2"><strong>Doctor Sharing:</strong> <Badge variant="destructive">Disabled</Badge></div>
                         </CardContent>
                     </Card>
                 </div>
@@ -131,3 +132,4 @@ export function HealthReport() {
         </div>
     );
 }
+
