@@ -60,25 +60,36 @@ export function ProfileForm() {
 
   useEffect(() => {
     if (user && !isUserLoading && profileRef) {
-        form.setValue("name", user.displayName || "");
-        
         const fetchProfile = async () => {
-            const docSnap = await getDoc(profileRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                form.reset({
-                    name: data.name || user.displayName,
-                    dateOfBirth: data.dateOfBirth ? (data.dateOfBirth as Timestamp).toDate() : undefined,
-                    gender: data.gender,
-                    bloodGroup: data.bloodGroup,
-                    height: data.height,
-                    weight: data.weight,
+            try {
+                const docSnap = await getDoc(profileRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    form.reset({
+                        name: data.name || user.displayName || "",
+                        dateOfBirth: data.dateOfBirth ? (data.dateOfBirth as Timestamp).toDate() : undefined,
+                        gender: data.gender,
+                        bloodGroup: data.bloodGroup,
+                        height: data.height || 0,
+                        weight: data.weight || 0,
+                    });
+                } else {
+                     form.reset({
+                        name: user.displayName || "",
+                     });
+                }
+            } catch (error) {
+                console.error("Error fetching user profile:", error);
+                toast({
+                    variant: "destructive",
+                    title: "Error",
+                    description: "Could not fetch your profile data.",
                 });
             }
         };
         fetchProfile();
     }
-  }, [user, isUserLoading, form, profileRef]);
+  }, [user, isUserLoading, form, profileRef, toast]);
 
   async function onSubmit(data: ProfileFormValues) {
     if (!profileRef || !user) {
@@ -257,7 +268,7 @@ export function ProfileForm() {
                 <FormItem>
                 <FormLabel>Height (cm)</FormLabel>
                 <FormControl>
-                    <Input type="number" placeholder="e.g., 175" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
+                    <Input type="number" placeholder="e.g., 175" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -270,7 +281,7 @@ export function ProfileForm() {
                 <FormItem>
                 <FormLabel>Weight (kg)</FormLabel>
                 <FormControl>
-                    <Input type="number" placeholder="e.g., 70" {...field} onChange={e => field.onChange(parseInt(e.target.value, 10) || 0)} />
+                    <Input type="number" placeholder="e.g., 70" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>

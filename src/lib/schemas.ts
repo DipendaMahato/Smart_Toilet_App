@@ -22,6 +22,6 @@ export const ProfileSchema = z.object({
   dateOfBirth: z.date({ required_error: "Date of birth is required."}),
   gender: z.enum(["male", "female", "other"], { required_error: "Please select a gender."}),
   bloodGroup: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"], { required_error: "Please select a blood group."}),
-  height: z.number().positive({ message: "Height must be a positive number." }),
-  weight: z.number().positive({ message: "Weight must be a positive number." }),
+  height: z.coerce.number().positive({ message: "Height must be a positive number." }),
+  weight: z.coerce.number().positive({ message: "Weight must be a positive number." }),
 });
