@@ -71,6 +71,7 @@ export default function AppHeader() {
   const pageTitle = getPageTitle(pathname);
 
   const handleLogout = async () => {
+    if (!auth) return;
     await auth.signOut();
     router.push('/login');
   }
