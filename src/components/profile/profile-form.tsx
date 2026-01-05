@@ -106,7 +106,7 @@ export function ProfileForm() {
       ...data,
       id: user.uid,
       email: user.email,
-      phoneNumber: user.phoneNumber,
+      dateOfBirth: data.dateOfBirth ? data.dateOfBirth.toISOString() : null,
     };
 
     setDocumentNonBlocking(profileRef, profileData, { merge: true });

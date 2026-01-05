@@ -90,6 +90,7 @@ export function VerifyOtpForm() {
             name: userDetails.name,
             email: userDetails.email,
             phoneNumber: userDetails.phone,
+            // dateOfBirth is not collected at registration, so it's not included here
         };
 
         const profileRef = doc(firestore, "users", userCredential.user.uid);
