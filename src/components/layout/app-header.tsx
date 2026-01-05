@@ -19,7 +19,6 @@ import {
   Heart,
   Stethoscope,
   UserCircle,
-  Toilet,
 } from "lucide-react";
 import { useUser, useAuth } from "@/firebase";
 
@@ -34,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { AppLogo } from "../logo";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -94,7 +94,7 @@ export default function AppHeader() {
               href="/dashboard"
               className="flex items-center gap-2 text-lg font-semibold mb-4 font-headline text-primary"
             >
-              <Toilet className="h-8 w-8" />
+              <AppLogo className="h-8 w-8" />
               <span className="text-sm">Smart Toilet</span>
             </Link>
             {navItems.map((item) => (
