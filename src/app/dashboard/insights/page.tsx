@@ -1,15 +1,15 @@
-import { InsightsGenerator } from "@/components/insights/insights-generator";
+import { HealthReport } from "@/components/insights/health-report";
 
 export default function InsightsPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-headline font-bold">AI Health Insights</h1>
+        <h1 className="text-3xl font-headline font-bold">Real-Time Health Insights</h1>
         <p className="text-muted-foreground">
-          Generate personalized health advice based on your data.
+          A comprehensive health snapshot from your latest session.
         </p>
       </div>
-      <InsightsGenerator />
+      <HealthReport />
     </div>
   );
 }
