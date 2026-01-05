@@ -20,7 +20,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoginSchema } from "@/lib/schemas";
-import Link from "next/link";
 import { useAuth } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
 
@@ -81,9 +80,6 @@ export function LoginForm() {
                 <FormItem>
                   <div className="flex items-center justify-between">
                     <FormLabel>Password</FormLabel>
-                    <Link href="/forgot-password" className="text-sm font-medium text-primary hover:underline">
-                      Forgot Password?
-                    </Link>
                   </div>
                   <FormControl>
                     <div className="relative">

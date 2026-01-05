@@ -6,7 +6,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,14 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { RegisterSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { sendOtpAction } from "@/lib/actions";
-import { useAuth } from "@/firebase";
+import { useAuth, useFirestore, useMemoFirebase } from "@/firebase";
+import { doc } from "firebase/firestore";
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 export function RegisterForm() {
   const router = useRouter();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -45,25 +47,40 @@ export function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     setLoading(true);
-    const result = await sendOtpAction(values.email);
-    setLoading(false);
-
-    if (result.success) {
-      toast({
-        title: "OTP Sent",
-        description: "Check your email for the one-time password to complete your registration.",
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      await updateProfile(userCredential.user, {
+        displayName: values.name,
       });
-      // Store user details and OTP to verify on the next page
-      sessionStorage.setItem('otp', result.otp || '');
-      // We pass all form values, including the password, to the verify-otp page
-      sessionStorage.setItem('user_details', JSON.stringify(values));
-      router.push("/verify-otp");
-    } else {
+
+      const profileData = {
+        id: userCredential.user.uid,
+        name: values.name,
+        email: values.email,
+        phoneNumber: values.phone,
+      };
+
+      const profileRef = doc(firestore, "users", userCredential.user.uid);
+      setDocumentNonBlocking(profileRef, profileData, { merge: true });
+      
+      toast({
+        title: "Success!",
+        description: "Your account has been created successfully.",
+      });
+      
+      router.push("/dashboard/profile");
+    } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Registration Failed",
-        description: result.error,
+        description: error.message || "An unexpected error occurred during registration.",
       });
+    } finally {
+      setLoading(false);
     }
   }
 
