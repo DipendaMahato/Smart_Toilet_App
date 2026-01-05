@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Droplets, TestTube, Activity, ShieldCheck, Download, User, Clock, Bot, BarChart, FileText, Palette, FlaskConical } from 'lucide-react';
+import { Droplets, Activity, ShieldCheck, Download, User, Clock, Bot, BarChart, FileText, Palette, FlaskConical } from 'lucide-react';
 import { Badge } from '../ui/badge';
 
 const ReportSection = ({ title, icon, children }: { title: string, icon: React.ReactNode, children: React.ReactNode }) => (
