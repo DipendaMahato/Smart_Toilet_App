@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import Image from "next/image";
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -91,8 +92,8 @@ export default function AppHeader() {
               href="/dashboard"
               className="flex items-center gap-2 text-lg font-semibold mb-4 font-headline text-primary"
             >
-              <HeartPulse className="h-6 w-6" />
-              <span className="text-sm">Smart Toilet for Real time Health Monitoring</span>
+              <Image src="/logo.png" alt="Smart Toilet Logo" width={40} height={40} />
+              <span className="text-sm">Smart Toilet</span>
             </Link>
             {navItems.map((item) => (
                  <Link key={item.label} href={item.href} className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground">
