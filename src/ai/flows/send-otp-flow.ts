@@ -1,30 +1,57 @@
 'use server';
 /**
- * @fileOverview A flow for generating a One-Time Password (OTP).
+ * @fileOverview A flow for generating and sending a One-Time Password (OTP) via email.
  *
- * - generateOtp - A function that generates a 6-digit OTP.
- * - GenerateOtpOutput - The return type for the generateOtp function.
+ * - sendOtp - A function that generates a 6-digit OTP and sends it to a specified email address.
+ * - SendOtpInput - The input type for the sendOtp function.
+ * - SendOtpOutput - The return type for the sendOtp function.
  */
 
 import { ai } from '@/ai/genkit';
 import { z } from 'zod';
+import * as nodemailer from 'nodemailer';
 
-const GenerateOtpOutputSchema = z.object({
-  otp: z.string().length(6).describe('The 6-digit OTP.'),
+const SendOtpInputSchema = z.object({
+  email: z.string().email().describe('The email address to send the OTP to.'),
 });
-export type GenerateOtpOutput = z.infer<typeof GenerateOtpOutputSchema>;
+export type SendOtpInput = z.infer<typeof SendOtpInputSchema>;
 
-export async function generateOtp(): Promise<GenerateOtpOutput> {
-  return generateOtpFlow();
+const SendOtpOutputSchema = z.object({
+  otp: z.string().length(6).describe('The 6-digit OTP that was sent.'),
+});
+export type SendOtpOutput = z.infer<typeof SendOtpOutputSchema>;
+
+export async function sendOtp(input: SendOtpInput): Promise<SendOtpOutput> {
+  return sendOtpFlow(input);
 }
 
-const generateOtpFlow = ai.defineFlow(
+const sendOtpFlow = ai.defineFlow(
   {
-    name: 'generateOtpFlow',
-    outputSchema: GenerateOtpOutputSchema,
+    name: 'sendOtpFlow',
+    inputSchema: SendOtpInputSchema,
+    outputSchema: SendOtpOutputSchema,
   },
-  async () => {
+  async ({ email }) => {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Your OTP for Smart Toilet App',
+      text: `Your One-Time Password is: ${otp}`,
+      html: `<p>Your One-Time Password is: <b>${otp}</b></p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
     return { otp };
   }
 );

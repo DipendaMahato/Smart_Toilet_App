@@ -8,6 +8,7 @@ import { mockMedicalProfile, mockToiletSensorData } from '@/lib/data';
 import { z } from 'zod';
 import { generateHealthInsights } from '@/ai/flows/generate-health-insights';
 import { refineInsightsWithReasoning } from '@/ai/flows/refine-insights-with-reasoning';
+import { sendOtp as sendOtpFlow, SendOtpInput } from '@/ai/flows/send-otp-flow';
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -42,4 +43,14 @@ export async function getAiInsights() {
     console.error('Error generating AI insights:', error);
     return { error: 'Failed to generate insights. Please try again later.' };
   }
+}
+
+export async function sendOtp(input: SendOtpInput) {
+    try {
+        const result = await sendOtpFlow(input);
+        return { otp: result.otp };
+    } catch (error) {
+        console.error('Error sending OTP:', error);
+        return { error: 'Failed to send OTP. Please check the email address and try again.' };
+    }
 }

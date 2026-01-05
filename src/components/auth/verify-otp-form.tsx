@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,6 +7,7 @@ import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc } from "firebase/firestore";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,8 +21,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/firebase";
+import { useAuth, useFirestore } from "@/firebase";
 import type { RegisterSchema } from "@/lib/schemas";
+import { setDocumentNonBlocking } from "@/firebase/non-blocking-updates";
 
 const VerifyOtpSchema = z.object({
   otp: z.string().min(6, { message: "OTP must be 6 digits." }).max(6),
@@ -29,6 +32,7 @@ const VerifyOtpSchema = z.object({
 export function VerifyOtpForm() {
   const router = useRouter();
   const auth = useAuth();
+  const firestore = useFirestore();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [storedOtp, setStoredOtp] = useState<string | null>(null);
@@ -69,7 +73,7 @@ export function VerifyOtpForm() {
     }
 
     // OTP is correct, proceed with action (registration or password reset)
-    if (userDetails) {
+    if (userDetails && auth && firestore) {
       // This is a registration flow
       try {
         const userCredential = await createUserWithEmailAndPassword(
@@ -80,6 +84,16 @@ export function VerifyOtpForm() {
         await updateProfile(userCredential.user, {
           displayName: userDetails.name,
         });
+        
+        const profileData = {
+            id: userCredential.user.uid,
+            name: userDetails.name,
+            email: userDetails.email,
+            phoneNumber: userDetails.phone,
+        };
+
+        const profileRef = doc(firestore, "users", userCredential.user.uid);
+        setDocumentNonBlocking(profileRef, profileData, { merge: true });
 
         toast({
           title: "Success!",
@@ -106,11 +120,9 @@ export function VerifyOtpForm() {
         title: "OTP Verified",
         description: "You can now reset your password.",
       });
-      // In a real app, you would redirect to a password reset page.
-      // For now, we'll just clean up and go to login.
       sessionStorage.removeItem('otp');
-      sessionStorage.removeItem('email_for_verification');
-      router.push("/login"); // Should be a reset password page
+      // We keep email_for_verification for the reset password form
+      router.push("/reset-password");
     }
 
     setLoading(false);

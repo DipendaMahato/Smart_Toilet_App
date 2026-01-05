@@ -5,8 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { confirmPasswordReset, reauthenticateWithCredential, EmailAuthProvider, updatePassword } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,52 +20,79 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { RegisterSchema } from "@/lib/schemas";
 import { useToast } from "@/hooks/use-toast";
-import { sendOtp } from "@/lib/actions";
+import { useAuth, useUser } from "@/firebase";
 
-export function RegisterForm() {
+const ResetPasswordSchema = z.object({
+  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
+  confirmPassword: z.string(),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "Passwords do not match.",
+  path: ["confirmPassword"],
+});
+
+
+export function ResetPasswordForm() {
   const router = useRouter();
+  const auth = useAuth();
+  const { user } = useUser();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem('email_for_verification');
+    setEmail(storedEmail);
+  }, []);
+
+  const form = useForm<z.infer<typeof ResetPasswordSchema>>({
+    resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+  async function onSubmit(values: z.infer<typeof ResetPasswordSchema>) {
+    if (!auth) return;
     setLoading(true);
-    try {
-      const response = await sendOtp({ email: values.email });
-      if (response.error) {
-        throw new Error(response.error);
-      }
 
-      // Store user details and OTP in session storage to use after verification
-      sessionStorage.setItem("user_details", JSON.stringify(values));
-      sessionStorage.setItem("otp", response.otp!);
+    try {
+        if (user) {
+             // User is logged in, re-authenticate and update password
+             const credential = EmailAuthProvider.credential(user.email!, prompt('Please enter your current password for security reasons: ' )!);
+             await reauthenticateWithCredential(user, credential);
+             await updatePassword(user, values.password);
+        } else {
+             // This flow is not fully supported by Firebase client SDK directly without oobCode
+             // A more robust solution would use Firebase Admin SDK to generate a reset link
+             // For this client-side example, we'll assume we're changing an unauthenticated user's password
+             // which is not a standard Firebase Auth flow.
+             // We'll redirect to login with a message.
+            console.warn("Password reset for unauthenticated users is not directly supported on the client. A backend with Admin SDK is recommended.");
+            toast({
+                title: "Action required",
+                description: "Password reset is not complete. Please login with your old password to update it in settings.",
+            });
+            router.push('/login');
+            return;
+        }
 
       toast({
-        title: "OTP Sent",
-        description: `A verification code has been sent to ${values.email}.`,
+        title: "Success",
+        description: "Your password has been updated successfully.",
       });
 
-      router.push("/verify-otp");
+      sessionStorage.removeItem('email_for_verification');
+      router.push("/dashboard");
 
     } catch (error: any) {
       toast({
         variant: "destructive",
-        title: "Registration Failed",
-        description: error.message || "An unexpected error occurred during registration.",
+        title: "Password Reset Failed",
+        description: error.message || "An unexpected error occurred.",
       });
     } finally {
       setLoading(false);
@@ -75,52 +103,13 @@ export function RegisterForm() {
     <Card>
       <CardContent className="p-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Dipendra Mahato" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="smarttiolet5@gmail.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="phone"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
-                  <FormControl>
-                    <Input placeholder="(123) 456-7890" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+           <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>New Password</FormLabel>
                   <FormControl>
                      <div className="relative">
                       <Input
@@ -148,7 +137,7 @@ export function RegisterForm() {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>Confirm New Password</FormLabel>
                   <FormControl>
                      <div className="relative">
                       <Input
@@ -172,7 +161,7 @@ export function RegisterForm() {
               )}
             />
             <Button type="submit" className="w-full" loading={loading}>
-              Create Account
+              Reset Password
             </Button>
           </form>
         </Form>

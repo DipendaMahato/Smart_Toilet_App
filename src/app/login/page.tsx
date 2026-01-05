@@ -17,12 +17,19 @@ export default function LoginPage() {
           Sign in to access your health dashboard.
         </p>
         <LoginForm />
-        <p className="mt-4 text-center text-sm text-muted-foreground">
-          Don't have an account?{' '}
-          <Link href="/register" className="font-medium text-primary hover:underline">
-            Sign up
-          </Link>
-        </p>
+        <div className="flex justify-between mt-4 text-sm">
+            <p className="text-muted-foreground">
+             <Link href="/forgot-password" className="font-medium text-primary hover:underline">
+                Forgot password?
+             </Link>
+            </p>
+            <p className="text-muted-foreground">
+             Don't have an account?{' '}
+             <Link href="/register" className="font-medium text-primary hover:underline">
+                Sign up
+             </Link>
+            </p>
+        </div>
       </div>
     </div>
   );

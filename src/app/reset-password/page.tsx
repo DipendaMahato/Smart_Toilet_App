@@ -1,21 +1,21 @@
 
-import { VerifyOtpForm } from "@/components/auth/verify-otp-form";
+import { ResetPasswordForm } from "@/components/auth/reset-password-form";
 import { AppLogo } from "@/components/logo";
 
-export default function VerifyOtpPage() {
+export default function ResetPasswordPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-6">
-            <AppLogo className="w-20 h-20 text-primary" />
+          <AppLogo className="w-20 h-20 text-primary" />
         </div>
         <h1 className="font-headline text-3xl font-bold text-center mb-2 text-primary">
-          Verify Your Account
+          Reset Your Password
         </h1>
         <p className="text-center text-muted-foreground mb-6">
-          Enter the 6-digit code sent to your email.
+          Enter a new password for your account.
         </p>
-        <VerifyOtpForm />
+        <ResetPasswordForm />
       </div>
     </div>
   );
