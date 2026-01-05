@@ -151,7 +151,7 @@ export function SettingsTabs() {
             <CardDescription>
               Choose what alerts you want to receive.
             </CardDescription>
-          </Header>
+          </CardHeader>
           <CardContent className="space-y-4">
              <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
                 <div className="space-y-0.5">
