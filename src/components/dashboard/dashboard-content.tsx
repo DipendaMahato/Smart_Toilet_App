@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -67,7 +68,7 @@ export function DashboardContent() {
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {subDashboards.map((dashboard, index) => (
           <Link href={dashboard.href} key={dashboard.title} className="group" style={{ animationDelay: `${300 + index * 100}ms`, animationFillMode: 'backwards' }}>
-            <Card className="h-full rounded-2xl overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 animate-slide-up">
+            <Card className="h-full overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:border-primary/30 hover:-translate-y-1.5 animate-slide-up">
               <div className="p-6">
                 <div className="flex items-start justify-between gap-4">
                     <div className="space-y-3">

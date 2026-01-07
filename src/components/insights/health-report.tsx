@@ -9,7 +9,7 @@ import { Badge } from '../ui/badge';
 import { cn } from '@/lib/utils';
 
 const ReportSection = ({ title, icon, children, className }: { title: string, icon: React.ReactNode, children: React.ReactNode, className?: string }) => (
-    <Card className={cn("rounded-2xl shadow-sm", className)}>
+    <Card className={cn("shadow-sm", className)}>
         <CardHeader className="flex flex-row items-center gap-4">
             <div className="bg-primary/10 text-primary p-3 rounded-xl">
                 {icon}
@@ -50,7 +50,7 @@ export function HealthReport() {
 
     return (
         <div className="space-y-8 animate-fade-in">
-            <Card className="rounded-2xl bg-gradient-to-br from-primary/90 to-secondary/90 text-primary-foreground shadow-lg animate-slide-up" style={{animationDelay: '200ms'}}>
+            <Card className="bg-gradient-to-br from-primary/90 to-secondary/90 text-primary-foreground shadow-lg animate-slide-up" style={{animationDelay: '200ms'}}>
                 <CardContent className="p-6 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="space-y-2">
                         <h2 className="text-xl font-semibold font-headline">Your latest health report is ready.</h2>
@@ -109,7 +109,7 @@ export function HealthReport() {
                 </div>
 
                 <div className="lg:col-span-1 space-y-6">
-                    <Card className="rounded-2xl shadow-sm animate-slide-up" style={{animationDelay: '600ms'}}>
+                    <Card className="shadow-sm animate-slide-up" style={{animationDelay: '600ms'}}>
                         <CardHeader>
                             <CardTitle className="font-headline flex items-center gap-3"><div className="p-2 bg-primary/10 rounded-lg text-primary"><Bot /></div> AI Health Summary</CardTitle>
                         </CardHeader>
@@ -131,7 +131,7 @@ export function HealthReport() {
                             </div>
                         </CardContent>
                     </Card>
-                     <Card className="rounded-2xl shadow-sm animate-slide-up" style={{animationDelay: '700ms'}}>
+                     <Card className="shadow-sm animate-slide-up" style={{animationDelay: '700ms'}}>
                         <CardHeader>
                            <CardTitle className="font-headline flex items-center gap-3"><div className="p-2 bg-secondary/10 rounded-lg text-secondary"><ShieldCheck/></div> Privacy & Security</CardTitle>
                         </CardHeader>
