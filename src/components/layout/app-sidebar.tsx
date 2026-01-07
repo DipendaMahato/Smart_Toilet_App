@@ -58,7 +58,7 @@ export default function AppSidebar() {
         </Link>
       </div>
       <div className="flex-1 overflow-y-auto">
-        <nav className="flex flex-col gap-1 p-2">
+        <nav className="flex flex-col gap-1 p-4">
           {navItems.map((item) => (
             <Link
               key={item.label}
