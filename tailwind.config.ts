@@ -57,6 +57,7 @@ export default {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        'glass-white': 'rgba(255, 255, 255, 0.5)',
         status: {
           green: 'hsl(var(--status-green))',
           yellow: 'hsl(var(--status-yellow))',
@@ -103,6 +104,9 @@ export default {
         'fade-in': 'fade-in 0.5s ease-out',
         'slide-up': 'slide-up 0.5s ease-out forwards',
       },
+      boxShadow: {
+        'soft': '0 4px 12px 0 rgba(0, 0, 0, 0.05)',
+      }
     },
   },
   plugins: [require('tailwindcss-animate')],

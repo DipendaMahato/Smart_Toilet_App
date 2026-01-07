@@ -1,13 +1,13 @@
 
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
-import { AppLogo } from "@/components/logo";
+import Image from "next/image";
 
 export default function ResetPasswordPage() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-6">
-          <AppLogo className="w-20 h-20 text-primary" />
+          <Image src="/logo.png" alt="App Logo" width={80} height={80} className="text-primary" />
         </div>
         <h1 className="font-headline text-3xl font-bold text-center mb-2 text-primary">
           Reset Your Password

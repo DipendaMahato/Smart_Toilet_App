@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 import {
   Menu,
   Search,
@@ -33,7 +34,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { AppLogo } from "../logo";
+
 
 const navItems = [
   { href: "/dashboard", icon: Home, label: "Dashboard" },
@@ -106,7 +107,7 @@ export default function AppHeader() {
               href="/dashboard"
               className="flex items-center gap-2 text-lg font-semibold mb-4 font-headline text-primary"
             >
-              <AppLogo className="h-8 w-8" />
+              <Image src="/logo.png" alt="App Logo" width={32} height={32} />
               <span className="text-sm">Smart Toilet</span>
             </Link>
             {navItems.map((item) => (

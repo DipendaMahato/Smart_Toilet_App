@@ -14,19 +14,19 @@ body {
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary: 185 86% 47%;
+    --primary: 175 80% 40%; /* Teal from logo */
     --primary-foreground: 0 0% 98%;
     --secondary: 211 77% 48%;
     --secondary-foreground: 0 0% 98%;
     --muted: 220 13% 91%;
     --muted-foreground: 220 9% 46%;
-    --accent: 220 13% 91%;
+    --accent: 84 79% 50%; /* Lime Green from logo */
     --accent-foreground: 220 9% 46%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 89%;
     --input: 220 13% 89%;
-    --ring: 185 86% 47%;
+    --ring: 175 80% 40%; /* Teal from logo */
     --radius: 0.5rem;
 
     /* Custom Status Colors */
@@ -35,7 +35,7 @@ body {
     --status-orange: 25 95% 61%;
     --status-red: 0 84% 60%;
     
-    --chart-1: 185 86% 47%;
+    --chart-1: 175 80% 40%;
     --chart-2: 211 77% 48%;
     --chart-3: 142 71% 45%;
     --chart-4: 48 96% 59%;
@@ -49,19 +49,19 @@ body {
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 185 86% 47%;
+    --primary: 175 80% 40%; /* Teal from logo */
     --primary-foreground: 210 40% 98%;
     --secondary: 211 77% 48%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 84 79% 50%; /* Lime Green from logo */
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 185 86% 47%;
+    --ring: 175 80% 40%;
     
     /* Custom Status Colors */
     --status-green: 142 71% 45%;
@@ -69,7 +69,7 @@ body {
     --status-orange: 25 95% 61%;
     --status-red: 0 72% 51%;
 
-    --chart-1: 185 86% 47%;
+    --chart-1: 175 80% 40%;
     --chart-2: 211 77% 48%;
     --chart-3: 142 71% 45%;
     --chart-4: 48 96% 59%;
