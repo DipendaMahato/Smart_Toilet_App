@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useEffect } from 'react';
 import { SensorCard } from '@/components/dashboard/sensor-card';
@@ -5,24 +6,29 @@ import { CircularGauge } from '@/components/charts/circular-gauge';
 import { SemiCircleGauge } from '@/components/charts/semi-circle-gauge';
 import { TinyAreaChart } from '@/components/charts/tiny-area-chart';
 import { JaggedLineChart } from '@/components/charts/jagged-line-chart';
-import { AlertTriangle, BatteryFull, Droplet, Gauge, Signal, Wifi, Clock, Calendar } from 'lucide-react';
+import { AlertTriangle, BatteryFull, Droplet, Gauge, Signal, Wifi, Clock, Calendar, Zap } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Switch } from '@/components/ui/switch';
 
 export default function LiveSensorDataPage() {
     const [usageStatus, setUsageStatus] = useState(8);
     const [waterTank, setWaterTank] = useState(77);
     const [flushCount, setFlushCount] = useState(42);
     const [ammonia, setAmmonia] = useState(5.18);
-    const [battery, setBattery] = useState(92);
+    const [turbidity, setTurbidity] = useState(35);
+    const [battery, setBattery] = useState(82);
     const [connectivity, setConnectivity] = useState(true);
+    const [autoFlush, setAutoFlush] = useState(true);
+    const [lightControl, setLightControl] = useState(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setUsageStatus(Math.random() * 10);
             setWaterTank(Math.floor(Math.random() * 20) + 70);
             setAmmonia(Math.random() * 2 + 4);
-            setBattery(Math.floor(Math.random() * 10) + 90);
+            setTurbidity(Math.floor(Math.random() * 40) + 20);
+            setBattery(Math.floor(Math.random() * 15) + 80);
         }, 3000);
         return () => clearInterval(interval);
     }, []);
@@ -115,9 +121,9 @@ export default function LiveSensorDataPage() {
                         <p className="text-xs text-gray-500 mt-1">{ammonia.toFixed(2)} ppm</p>
                     </SensorCard>
                      <SensorCard className="flex flex-col items-center justify-center animate-slide-up" style={{ animationDelay: '1100ms' }}>
-                        <h3 className="font-semibold text-gray-300 text-sm mb-2">Ammonia Gas</h3>
-                        <SemiCircleGauge value={(5 / 10) * 100} size="sm" />
-                        <p className="text-xs text-gray-500 mt-1">5 ppm</p>
+                        <h3 className="font-semibold text-gray-300 text-sm mb-2">Turbidity</h3>
+                        <SemiCircleGauge value={turbidity} size="sm" />
+                        <p className="text-xs text-gray-500 mt-1">{turbidity} NTU</p>
                     </SensorCard>
                 </div>
 
@@ -125,7 +131,7 @@ export default function LiveSensorDataPage() {
                      <SensorCard className="flex items-center justify-between px-4 animate-slide-up" style={{ animationDelay: '1200ms' }}>
                         <h3 className="font-semibold text-gray-300 text-sm">Battery</h3>
                         <div className="flex items-center gap-2">
-                           <p className="text-sm font-bold text-gray-200">ONLINE</p>
+                           <p className="text-sm font-bold text-gray-200">{battery}%</p>
                            <BatteryFull className="h-6 w-6 text-green-400"/>
                         </div>
                     </SensorCard>
@@ -152,7 +158,22 @@ export default function LiveSensorDataPage() {
                        <p className="text-sm font-bold text-green-400">LAST TEST: NORMAL</p>
                     </div>
                 </SensorCard>
+                 <SensorCard className="animate-slide-up" style={{ animationDelay: '1600ms' }}>
+                    <h3 className="font-semibold text-gray-300 text-sm mb-2 flex items-center gap-2"><Zap size={16}/>Automation</h3>
+                    <div className="space-y-2 mt-2">
+                        <div className='flex justify-between items-center'>
+                            <p className='text-sm text-gray-400'>Auto Flush</p>
+                            <Switch checked={autoFlush} onCheckedChange={setAutoFlush} />
+                        </div>
+                        <div className='flex justify-between items-center'>
+                            <p className='text-sm text-gray-400'>Light Control</p>
+                            <Switch checked={lightControl} onCheckedChange={setLightControl} />
+                        </div>
+                    </div>
+                </SensorCard>
             </div>
         </div>
     );
 }
+
+  
