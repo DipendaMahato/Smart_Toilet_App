@@ -6,7 +6,7 @@ import { CircularGauge } from '@/components/charts/circular-gauge';
 import { SemiCircleGauge } from '@/components/charts/semi-circle-gauge';
 import { TinyAreaChart } from '@/components/charts/tiny-area-chart';
 import { JaggedLineChart } from '@/components/charts/jagged-line-chart';
-import { AlertTriangle, BatteryFull, Droplet, Gauge, Signal, Wifi, Clock, Calendar, Zap } from 'lucide-react';
+import { AlertTriangle, BatteryFull, Droplet, Gauge, Signal, Wifi, Clock, Calendar, Zap, FlaskConical } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Switch } from '@/components/ui/switch';
@@ -21,6 +21,7 @@ export default function LiveSensorDataPage() {
     const [connectivity, setConnectivity] = useState(true);
     const [autoFlush, setAutoFlush] = useState(true);
     const [lightControl, setLightControl] = useState(false);
+    const [chemicalLevel, setChemicalLevel] = useState(85);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -29,6 +30,7 @@ export default function LiveSensorDataPage() {
             setAmmonia(Math.random() * 2 + 4);
             setTurbidity(Math.floor(Math.random() * 40) + 20);
             setBattery(Math.floor(Math.random() * 15) + 80);
+            setChemicalLevel(Math.floor(Math.random() * 100));
         }, 3000);
         return () => clearInterval(interval);
     }, []);
@@ -46,6 +48,13 @@ export default function LiveSensorDataPage() {
             </div>
         );
     }
+    
+    const getChemicalColor = (level: number) => {
+        if (level < 20) return 'text-red-500';
+        if (level < 50) return 'text-yellow-400';
+        return 'text-green-400';
+    }
+
 
     return (
         <div className="bg-navy p-4 md:p-8 rounded-2xl animate-fade-in min-h-full">
@@ -110,8 +119,9 @@ export default function LiveSensorDataPage() {
 
                 {/* Row 3 */}
                 <SensorCard className="flex flex-col items-center justify-center animate-slide-up" style={{ animationDelay: '900ms' }}>
-                     <h3 className="font-semibold text-gray-300 mb-2">Water Tank Level</h3>
-                     <Droplet className="h-10 w-10 text-teal-400" />
+                     <h3 className="font-semibold text-gray-300 mb-2">Chemical Level Status</h3>
+                     <FlaskConical className={cn("h-10 w-10", getChemicalColor(chemicalLevel))} />
+                     <p className={cn("text-lg font-bold mt-2", getChemicalColor(chemicalLevel))}>{chemicalLevel}%</p>
                 </SensorCard>
 
                 <div className="grid grid-cols-2 gap-6">
@@ -177,3 +187,5 @@ export default function LiveSensorDataPage() {
 }
 
   
+
+    
