@@ -84,7 +84,6 @@ const FindDoctorsAndHospitals = () => (
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         </div>
         <div className="space-y-2">
-            <DoctorCard name="Dr. Aisha Rahman" specialty="Urology Specialist" online />
             <DoctorCard name="Dr. Dipendra Mahato" specialty="Cardiologist" />
             <DoctorCard name="Dr. Akshriya T" specialty="General Physician" online/>
             <DoctorCard name="Dr. Gajendra Achriya" specialty="Neurologist" />
