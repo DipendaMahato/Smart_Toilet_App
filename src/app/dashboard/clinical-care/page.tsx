@@ -1,24 +1,93 @@
 'use client';
-import Image from 'next/image';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
+import { Heart, Droplet, Foot, Activity, Clock, ShieldPlus } from 'lucide-react';
+
+const dashboards = [
+    {
+        title: 'GENERAL HEALTH CHECKUP',
+        icon: Heart,
+        color: 'border-green-400',
+        textColor: 'text-green-400',
+        details: [
+            { label: 'WELLNESS SCORE', value: 'GOOD' },
+            { label: 'Heart Rate', value: 'STABLE' },
+            { label: 'Hydration', value: 'OPTIMAL' },
+        ],
+    },
+    {
+        title: 'URINARY HEALTH',
+        icon: Droplet,
+        color: 'border-teal-400',
+        textColor: 'text-teal-400',
+        details: [
+            { label: 'URINE ANALYSIS', value: 'LOW RISK' },
+            { label: 'pH Level', value: 'NORMAL' },
+            { label: 'Leukocytes', value: 'NEGATIVE' },
+        ],
+    },
+    {
+        title: 'DIGESTIVE HEALTH',
+        icon: Foot,
+        color: 'border-yellow-400',
+        textColor: 'text-yellow-400',
+        details: [
+            { label: 'BOWEL REGULARITY', value: 'NORMAL' },
+            { label: 'Microbiome', value: 'BALANCED' },
+            { label: 'Occult Blood', value: 'NEGATIVE' },
+        ],
+    },
+    {
+        title: 'METABOLIC & LIFESTYLE HEALTH',
+        icon: Activity,
+        color: 'border-purple-400',
+        textColor: 'text-purple-400',
+        details: [
+            { label: 'GLUCOSE', value: 'STABLE' },
+            { label: 'Activity Level', value: 'ADEQUATE' },
+            { label: 'Sleep Quality', value: 'GOOD' },
+        ],
+    },
+];
+
+
+const HealthDashboardCard = ({ title, icon: Icon, color, textColor, details }: typeof dashboards[0]) => (
+    <Card className={cn("bg-card/50 border-2 hover:-translate-y-1 transition-transform duration-300", color)}>
+        <CardHeader>
+            <CardTitle className="font-headline text-sm tracking-wider text-muted-foreground">{title}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+            {details.map((item, index) => (
+                <div key={index} className="flex items-center gap-4">
+                    {index === 0 && <Icon className={cn("w-6 h-6", textColor)} />}
+                    <div className={cn(index === 0 ? '' : 'ml-10')}>
+                         <p className={cn("font-semibold", index === 0 ? 'text-lg' : 'text-md')}>
+                            {item.label}: <span className={cn(index > 0 ? 'text-muted-foreground' : '', textColor)}>{item.value}</span>
+                        </p>
+                    </div>
+                </div>
+            ))}
+        </CardContent>
+    </Card>
+);
 
 export default function ClinicalCarePage() {
   return (
-    <div className="space-y-8 animate-fade-in">
-        <div className="animate-slide-up">
-            <h1 className="text-3xl font-headline font-bold">Clinical Care & Hospital Services</h1>
-            <p className="text-muted-foreground">
-                This section is currently under construction.
-            </p>
+    <div className="space-y-8 animate-fade-in p-4 md:p-0">
+        <div className="flex items-center gap-4 animate-slide-up">
+            <ShieldPlus className="w-8 h-8 text-primary" />
+            <h1 className="text-2xl font-headline font-bold">CLINICAL CARE & HOSPITAL SERVICES</h1>
         </div>
-        <div className="animate-slide-up" style={{ animationDelay: '300ms' }}>
-            <Image 
-                src="https://storage.googleapis.com/aif-us-public-images/app-client-prod/image-generation/c5717ce0-4824-42b7-a065-27a988d447d9.png" 
-                alt="Hospital Building"
-                width={1200}
-                height={600}
-                className="rounded-2xl object-cover w-full h-auto"
-                data-ai-hint="hospital building"
-            />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
+            {dashboards.map((dashboard, index) => (
+                <HealthDashboardCard key={index} {...dashboard} />
+            ))}
+        </div>
+
+        <div className="flex items-center justify-start gap-2 text-xs text-muted-foreground animate-slide-up" style={{ animationDelay: '500ms' }}>
+            <Clock className="w-4 h-4" />
+            <span>LAST SYNC: 19 MIN AGO</span>
         </div>
     </div>
   );
