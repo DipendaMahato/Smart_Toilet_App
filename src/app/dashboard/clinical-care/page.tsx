@@ -176,7 +176,7 @@ const AppointmentCalendar = () => {
                 <Button variant="ghost" size="icon" onClick={() => setDate(new Date(year, month + 1, 1))}><ChevronRight/></Button>
             </div>
              <div className="grid grid-cols-7 text-center text-xs text-muted-foreground">
-                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map(day => <div key={day}>{day}</div>)}
+                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => <div key={`${day}-${index}`}>{day}</div>)}
             </div>
             <div className="grid grid-cols-7 gap-1 mt-2">
                 {renderCalendarDays()}
@@ -335,5 +335,7 @@ export default function ClinicalCarePage() {
     </div>
   );
 }
+
+    
 
     
