@@ -1,7 +1,8 @@
+
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Heart, Droplet, Foot, Activity, Clock, ShieldPlus } from 'lucide-react';
+import { Heart, Droplet, Footprints, Activity, Clock, ShieldPlus } from 'lucide-react';
 
 const dashboards = [
     {
@@ -28,7 +29,7 @@ const dashboards = [
     },
     {
         title: 'DIGESTIVE HEALTH',
-        icon: Foot,
+        icon: Footprints,
         color: 'border-yellow-400',
         textColor: 'text-yellow-400',
         details: [
