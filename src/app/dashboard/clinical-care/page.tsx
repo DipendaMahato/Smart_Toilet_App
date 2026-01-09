@@ -2,7 +2,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Heart, Droplet, Footprints, Activity, Clock, ShieldPlus } from 'lucide-react';
+import { Heart, Droplet, Footprints, Clock, ShieldPlus, Siren } from 'lucide-react';
 
 const dashboards = [
     {
@@ -33,12 +33,12 @@ const dashboards = [
         ],
     },
     {
-        title: 'METABOLIC & LIFESTYLE HEALTH',
-        icon: Activity,
-        color: 'border-purple-400',
-        textColor: 'text-purple-400',
+        title: 'EMERGENCY CARE',
+        icon: Siren,
+        color: 'border-red-400',
+        textColor: 'text-red-400',
         details: [
-            { label: 'GLUCOSE', value: 'STABLE' },
+            { label: 'STATUS', value: 'URGENT' },
         ],
     },
 ];
