@@ -28,18 +28,9 @@ const SectionCard = ({ title, children, className }: { title: string, children: 
   </Card>
 );
 
-const DoctorCard = ({ name, specialty, imageId, online }: { name: string, specialty: string, imageId: string, online?: boolean }) => {
-    const doctorImage = PlaceHolderImages.find(img => img.id === imageId);
+const DoctorCard = ({ name, specialty, online }: { name: string, specialty: string, online?: boolean }) => {
     return (
         <div className="flex items-center gap-4 p-3 rounded-lg hover:bg-muted/50 transition-colors">
-            <Image 
-                src={doctorImage?.imageUrl || ''}
-                alt={name}
-                width={48}
-                height={48}
-                className="rounded-full"
-                data-ai-hint={doctorImage?.imageHint}
-            />
             <div className="flex-1">
                 <p className="font-semibold">{name}</p>
                 <p className="text-sm text-muted-foreground">{specialty}</p>
@@ -93,9 +84,11 @@ const FindDoctorsAndHospitals = () => (
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         </div>
         <div className="space-y-2">
-            <DoctorCard name="Dr. Aisha Rahman" specialty="Urology Specialist" imageId="doctor-1" online />
-            <DoctorCard name="Doctor Profile" specialty="Cardiologist" imageId="doctor-2" />
-            <DoctorCard name="Dr. Elena Petrova" specialty="General Physician" imageId="doctor-3" online/>
+            <DoctorCard name="Dr. Aisha Rahman" specialty="Urology Specialist" online />
+            <DoctorCard name="Dr. Dipendra Mahato" specialty="Cardiologist" />
+            <DoctorCard name="Dr. Akshriya T" specialty="General Physician" online/>
+            <DoctorCard name="Dr. Gajendra Achriya" specialty="Neurologist" />
+            <DoctorCard name="Dr. Charu MG" specialty="Pediatrician" online/>
         </div>
     </SectionCard>
 );
