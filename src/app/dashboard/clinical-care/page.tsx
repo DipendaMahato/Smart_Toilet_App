@@ -243,41 +243,6 @@ const MedicalHistory = () => {
     );
 }
 
-const ClinicalNotes = () => {
-    const [isClient, setIsClient] = useState(false);
-    useEffect(() => { setIsClient(true) }, []);
-
-    return (
-        <SectionCard title="Clinical Notes & Prescriptions">
-            <Tabs defaultValue="clinical-notes">
-                <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="clinical-notes">Clinical Notes</TabsTrigger>
-                    <TabsTrigger value="e-prescriptions">E-Prescriptions</TabsTrigger>
-                    <TabsTrigger value="medicines">Medicines</TabsTrigger>
-                </TabsList>
-                <TabsContent value="clinical-notes" className="mt-4 space-y-3">
-                    {isClient ? (
-                        <>
-                            <div className="flex items-start space-x-3">
-                                <Checkbox id="note1" />
-                                <label htmlFor="note1" className="text-sm">Urine Diagnosis: mots 284-30 2339</label>
-                            </div>
-                            <div className="flex items-start space-x-3">
-                                <Checkbox id="note2" />
-                                <label htmlFor="note2" className="text-sm">Ahse ipreid altrieetiniseed is stleythe tersert instiegs</label>
-                            </div>
-                            <div className="flex items-start space-x-3">
-                                <Checkbox id="note3" />
-                                <label htmlFor="note3" className="text-sm">Thee def/Aestire 200-90 2008</label>
-                            </div>
-                        </>
-                    ) : null}
-                </TabsContent>
-            </Tabs>
-        </SectionCard>
-    );
-}
-
 const LabAndPharmacyServices = () => {
     const [isClient, setIsClient] = useState(false);
     useEffect(() => { setIsClient(true) }, []);
@@ -338,7 +303,6 @@ export default function ClinicalCarePage() {
             <div className="lg:col-span-1 md:col-span-2 space-y-6">
                 <FindDoctorsAndHospitals />
                 <BookAppointment />
-                <ClinicalNotes />
             </div>
             <div className="lg:col-span-1 md:col-span-1 space-y-6">
                 <BrowseProfilesAndConsult />
