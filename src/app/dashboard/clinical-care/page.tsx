@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { MoreHorizontal, Search, Star, Phone, Video, MessageSquare, Calendar, ChevronRight, ChevronLeft, Building, User, Hospital, Stethoscope, FileText, FlaskConical, Pill, Siren } from 'lucide-react';
-import React, 'useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SectionCard = ({ title, children, className }: { title: string, children: React.ReactNode, className?: string }) => (
   <Card className={cn("bg-card/50 border border-border/50", className)}>
