@@ -11,7 +11,6 @@ const services = [
         icon: Heart,
         color: 'border-green-400',
         textColor: 'text-green-400',
-        borderColor: 'hsl(var(--status-green))',
         href: '#',
     },
     {
@@ -19,7 +18,6 @@ const services = [
         icon: Droplet,
         color: 'border-teal-400',
         textColor: 'text-teal-400',
-        borderColor: 'hsl(var(--primary))',
         href: '#',
     },
     {
@@ -27,7 +25,6 @@ const services = [
         icon: Footprints,
         color: 'border-yellow-400',
         textColor: 'text-yellow-400',
-        borderColor: 'hsl(var(--status-yellow))',
         href: '#',
     },
     {
@@ -35,15 +32,13 @@ const services = [
         icon: Siren,
         color: 'border-red-400',
         textColor: 'text-red-400',
-        borderColor: 'hsl(var(--status-red))',
         href: '#',
     },
 ];
 
-const ServiceDashboardCard = ({ title, icon: Icon, color, textColor, href, borderColor }: typeof services[0] & { borderColor: string }) => (
-    <Link href={href} className="group relative rounded-2xl p-px" style={{ '--border-color': borderColor } as React.CSSProperties}>
-        <div className="absolute inset-0 rounded-2xl animated-border"></div>
-        <Card className={cn("bg-card/90 h-full flex flex-col justify-between transition-colors duration-300 group-hover:bg-card/80")}>
+const ServiceDashboardCard = ({ title, icon: Icon, color, textColor, href }: typeof services[0]) => (
+    <Link href={href} className="group">
+        <Card className={cn("bg-card/90 h-full flex flex-col justify-between transition-all duration-300 group-hover:bg-card/80 group-hover:-translate-y-1 group-hover:shadow-lg group-hover:shadow-primary/10 border-2 border-transparent hover:border-primary/20", color)}>
             <CardHeader>
                 <CardTitle className="font-headline text-sm tracking-wider text-muted-foreground">{title}</CardTitle>
             </CardHeader>
