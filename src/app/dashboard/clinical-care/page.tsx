@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { MoreHorizontal, Search, Star, Phone, Video, MessageSquare, Calendar, ChevronRight, ChevronLeft, Building, User, Hospital, Stethoscope, FileText, FlaskConical, Pill, Siren } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, 'useEffect, useState } from 'react';
 
 const SectionCard = ({ title, children, className }: { title: string, children: React.ReactNode, className?: string }) => (
   <Card className={cn("bg-card/50 border border-border/50", className)}>
@@ -334,50 +334,20 @@ export default function ClinicalCarePage() {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            <div className="hidden xl:block xl:col-span-1">
-                <Card className="p-4 bg-card/50">
-                    <h3 className="font-headline text-lg p-2">Clinical Care</h3>
-                    <nav className="space-y-1">
-                        <a href="#" className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 text-primary bg-primary/10">
-                            <Stethoscope className="h-5 w-5" />
-                            <span className="font-semibold">Specialization</span>
-                            <ChevronRight className="h-5 w-5 ml-auto" />
-                        </a>
-                         <a href="#" className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 text-muted-foreground">
-                            <Hospital className="h-5 w-5" />
-                            <span>Book Orafies</span>
-                        </a>
-                        <a href="#" className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 text-muted-foreground">
-                            <Pill className="h-5 w-5" />
-                            <span>Medication</span>
-                        </a>
-                         <a href="#" className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 text-muted-foreground">
-                            <FileText className="h-5 w-5" />
-                            <span>Heel torxtmtbes</span>
-                        </a>
-                         <a href="#" className="flex items-center gap-3 p-2 rounded-md hover:bg-muted/50 text-muted-foreground">
-                            <User className="h-5 w-5" />
-                            <span>Ceanconkates</span>
-                        </a>
-                    </nav>
-                </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-1 md:col-span-2 space-y-6">
+                <FindDoctorsAndHospitals />
+                <BookAppointment />
+                <ClinicalNotes />
             </div>
-            <div className="lg:col-span-3 xl:col-span-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 md:col-span-2 space-y-6">
-                    <FindDoctorsAndHospitals />
-                    <BookAppointment />
-                    <ClinicalNotes />
-                </div>
-                <div className="lg:col-span-1 md:col-span-1 space-y-6">
-                    <BrowseProfilesAndConsult />
-                    <MedicalHistory />
-                    <LabAndPharmacyServices />
-                </div>
-                 <div className="lg:col-span-1 md:col-span-1 space-y-6">
-                    <ShareHealthData />
-                    <LabAndPharmacySupport />
-                </div>
+            <div className="lg:col-span-1 md:col-span-1 space-y-6">
+                <BrowseProfilesAndConsult />
+                <MedicalHistory />
+                <LabAndPharmacyServices />
+            </div>
+             <div className="lg:col-span-1 md:col-span-1 space-y-6">
+                <ShareHealthData />
+                <LabAndPharmacySupport />
             </div>
         </div>
     </div>
