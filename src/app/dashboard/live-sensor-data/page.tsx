@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { Switch } from '@/components/ui/switch';
 
 export default function LiveSensorDataPage() {
-    const [usageStatus, setUsageStatus] = useState(0.8);
+    const [usageStatus, setUsageStatus] = useState(1);
     const [waterTank, setWaterTank] = useState(77);
     const [flushCount, setFlushCount] = useState(42);
     const [ammonia, setAmmonia] = useState(5.18);
@@ -25,7 +25,7 @@ export default function LiveSensorDataPage() {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setUsageStatus(Math.random());
+            setUsageStatus(Math.round(Math.random()));
             setWaterTank(Math.floor(Math.random() * 20) + 70);
             setAmmonia(Math.random() * 2 + 4);
             setTurbidity(Math.floor(Math.random() * 40) + 20);
@@ -66,8 +66,8 @@ export default function LiveSensorDataPage() {
                 {/* Row 1 */}
                 <SensorCard className="lg:col-span-1 flex flex-col items-center justify-center animate-slide-up" style={{ animationDelay: '200ms' }}>
                     <h3 className="font-semibold text-gray-300 mb-4">Toilet Usage Status</h3>
-                    <CircularGauge value={usageStatus * 100} label="IN USE" />
-                    <p className="text-xs text-gray-500 mt-4">Availability: {Math.round(usageStatus * 100)}%</p>
+                    <CircularGauge value={usageStatus === 1 ? 100 : 0} label={usageStatus === 1 ? "NOT IN USE" : "IN USE"} />
+                    <p className="text-xs text-gray-500 mt-4">{usageStatus === 1 ? 'Status: Available' : 'Status: Occupied'}</p>
                 </SensorCard>
 
                 <SensorCard className="border-green-500/50 shadow-green-500/20 lg:col-span-1 flex flex-col items-center justify-center animate-slide-up" style={{ animationDelay: '300ms' }}>
@@ -187,5 +187,7 @@ export default function LiveSensorDataPage() {
 }
 
   
+
+    
 
     
