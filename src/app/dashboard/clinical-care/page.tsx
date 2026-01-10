@@ -20,7 +20,7 @@ const services = [
         icon: Droplet,
         color: 'border-teal-400',
         textColor: 'text-teal-400',
-        href: '#',
+        href: '/dashboard/urinary-health-checkup',
     },
     {
         title: 'DIGESTIVE HEALTH CHECKUP',
