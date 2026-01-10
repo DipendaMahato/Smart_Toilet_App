@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Phone, AlertTriangle } from 'lucide-react';
+import { Phone, AlertTriangle, Clock, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 export default function EmergencyCarePage() {
@@ -38,8 +38,8 @@ export default function EmergencyCarePage() {
                          </div>
                         <h3 className="text-2xl font-bold font-headline">Dr. N. Manjunathan</h3>
                         <p className="text-status-red font-semibold">Chief Emergency Medical Officer</p>
-                        <p className="text-sm text-muted-foreground mt-2">MD, DNB (Emergency Medicine)</p>
-                        <p className="text-sm text-muted-foreground">25+ Years in Critical Care</p>
+                        <p className="text-sm text-muted-foreground mt-2">M.D.</p>
+                        <p className="text-sm text-muted-foreground">09 Years of Experience</p>
 
                         <div className="mt-6 w-full space-y-3">
                             <Button className="w-full bg-status-red hover:bg-status-red/90">
@@ -67,17 +67,19 @@ export default function EmergencyCarePage() {
                         </div>
                     </CardContent>
                 </Card>
-                 <Card className="bg-status-red/10 border-status-red/30">
+                 <Card>
                     <CardHeader>
-                        <CardTitle className="font-headline flex items-center gap-2"><AlertTriangle className="text-status-red" /> In Case of Emergency</CardTitle>
+                        <CardTitle className="font-headline">Availability</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                       <p className="text-muted-foreground">
-                           If you are experiencing a medical emergency, please call our emergency line immediately or visit the nearest hospital. Do not rely on email or app messages for urgent medical needs.
-                       </p>
-                       <p className="text-center text-2xl font-bold text-status-red tracking-wider">
-                           EMERGENCY: +91 123 456 7890
-                       </p>
+                        <div className="flex items-center gap-4 text-muted-foreground">
+                            <Clock className="h-5 w-5 text-status-red"/>
+                            <span>Full Time</span>
+                        </div>
+                         <div className="flex items-center gap-4 text-muted-foreground">
+                            <MapPin className="h-5 w-5 text-status-red"/>
+                            <span>Ground Floor – (Multi-Speciality)</span>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
