@@ -27,7 +27,7 @@ const services = [
         icon: Footprints,
         color: 'border-yellow-400',
         textColor: 'text-yellow-400',
-        href: '#',
+        href: '/dashboard/digestive-health',
     },
     {
         title: 'EMERGENCY CARE',
