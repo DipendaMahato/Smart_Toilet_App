@@ -2,7 +2,7 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { Heart, Droplet, Footprints, Siren, ArrowRight, Activity } from 'lucide-react';
+import { Heart, Droplet, Footprints, Siren, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
@@ -28,13 +28,6 @@ const services = [
         color: 'border-yellow-400',
         textColor: 'text-yellow-400',
         href: '/dashboard/digestive-health',
-    },
-    {
-        title: 'METABOLIC HEALTH CHECKUP',
-        icon: Activity,
-        color: 'border-purple-400',
-        textColor: 'text-purple-400',
-        href: '/dashboard/metabolic-health',
     },
     {
         title: 'EMERGENCY CARE',
@@ -116,7 +109,7 @@ export default function ClinicalCarePage() {
         </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
           {services.map((service, index) => (
               <ServiceDashboardCard key={index} {...service} />
           ))}
