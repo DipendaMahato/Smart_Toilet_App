@@ -156,12 +156,12 @@ export default function ClinicalCarePage() {
                     doctor.theme.border,
                     doctor.theme.shadow
                   )}>
-                    <CardContent className="p-8">
+                    <CardContent className="p-6">
                         <Image
                             src={doctor.image}
                             alt={doctor.name}
-                            width={128}
-                            height={128}
+                            width={100}
+                            height={100}
                             className="rounded-full object-cover border-4 border-white shadow-lg mx-auto mb-4"
                         />
                          {doctor.isEmergency && (
