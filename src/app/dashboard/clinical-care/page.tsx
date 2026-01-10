@@ -131,9 +131,9 @@ export default function ClinicalCarePage() {
           <Image 
             src="/hospital_logo.png" 
             alt="Hospital Logo" 
-            width={64}
-            height={64}
-            className="w-16 h-16 object-contain rounded-lg bg-white/50 p-2 shadow-sm"
+            width={80}
+            height={80}
+            className="w-20 h-20 object-contain rounded-lg bg-white/50 p-2 shadow-sm"
           />
         </div>
         <h1 className="text-4xl font-bold tracking-tight font-headline text-slate-800">Clinical Care Dashboard</h1>
