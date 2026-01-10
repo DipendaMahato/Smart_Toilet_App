@@ -2,11 +2,12 @@
 'use client';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Phone, Calendar, AlertTriangle, Building2, MapPin, Clock } from 'lucide-react';
+import { Phone, Calendar, AlertTriangle, Building2, MapPin, Clock, X } from 'lucide-react';
 import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import React, { useState } from 'react';
 
 const doctors = [
     {
@@ -18,11 +19,12 @@ const doctors = [
         experience: '8+ Years of Experience',
         availability: 'MON - SAT (08:00 AM – 05:00 PM)',
         floor: 'Ground floor',
+        bio: 'Dr. A. Arthi is a highly respected physician with over a decade of experience in general medicine. She is known for her compassionate approach and dedication to providing comprehensive care.',
         theme: {
-            border: 'border-primary/30',
-            shadow: 'shadow-primary/10',
-            text: 'text-primary',
-            bg: 'bg-primary'
+            border: 'border-blue-500/30',
+            shadow: 'shadow-blue-500/20',
+            text: 'text-blue-500',
+            bg: 'bg-blue-500'
         }
     },
     {
@@ -34,11 +36,12 @@ const doctors = [
         experience: '29 Years of Experience',
         availability: 'MON - SAT (08:00 AM – 04:00 PM)',
         floor: 'First Floor – (Multi-Speciality)',
+        bio: 'Dr. Suresh is a leading expert in diabetology and endocrinology, with nearly three decades of experience in managing complex hormonal and metabolic disorders.',
         theme: {
-            border: 'border-secondary/30',
-            shadow: 'shadow-secondary/10',
-            text: 'text-secondary',
-            bg: 'bg-secondary'
+            border: 'border-indigo-500/30',
+            shadow: 'shadow-indigo-500/20',
+            text: 'text-indigo-500',
+            bg: 'bg-indigo-500'
         }
     },
     {
@@ -50,11 +53,12 @@ const doctors = [
         experience: '12 Years of Experience',
         availability: 'MON - SAT (01:00 PM – 05:00 PM)',
         floor: 'First Floor – (Multi-Speciality)',
+        bio: 'A specialist in gastroenterology and hepatology, Dr. Arulselvan is skilled in diagnosing and treating a wide array of digestive and liver-related conditions.',
         theme: {
-            border: 'border-status-green/30',
-            shadow: 'shadow-status-green/10',
-            text: 'text-status-green',
-            bg: 'bg-status-green'
+            border: 'border-emerald-500/30',
+            shadow: 'shadow-emerald-500/20',
+            text: 'text-emerald-500',
+            bg: 'bg-emerald-500'
         }
     },
     {
@@ -66,102 +70,119 @@ const doctors = [
         experience: '09 Years of Experience',
         availability: 'Full Time',
         floor: 'Ground Floor – (Multi-Speciality)',
+        bio: 'As the head of the emergency department, Dr. Manjunathan leads a team of dedicated professionals to provide immediate and life-saving care to patients in critical condition.',
         theme: {
-            border: 'border-status-red/30',
-            shadow: 'shadow-status-red/10',
-            text: 'text-status-red',
-            bg: 'bg-status-red'
+            border: 'border-red-500/30',
+            shadow: 'shadow-red-500/20',
+            text: 'text-red-500',
+            bg: 'bg-red-500'
         },
         isEmergency: true
     },
 ];
 
-const AnimatedFooter = () => (
-    <CardFooter className="bg-muted/50 p-0 overflow-hidden rounded-b-xl">
-         <a 
-          href="https://www.sriramakrishnahospital.com/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-xs text-muted-foreground whitespace-nowrap animate-marquee hover:pause"
-        >
-          <span className="mx-4">For more services, please visit our website: www.sriramakrishnahospital.com</span>
-          <span className="mx-4">For more services, please visit our website: www.sriramakrishnahospital.com</span>
-        </a>
-    </CardFooter>
-);
+type Doctor = (typeof doctors)[0];
 
-const DoctorCard = ({ doctor }: { doctor: (typeof doctors)[0] }) => {
-    return (
-        <Card className={cn("flex flex-col h-full", doctor.theme.border)}>
-            <CardHeader className="text-center">
-                <div className="relative mx-auto mb-4">
+const DoctorDetailModal = ({ doctor, onClose }: { doctor: Doctor; onClose: () => void }) => (
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 animate-fade-in p-4" onClick={onClose}>
+        <div className="bg-card border border-border rounded-3xl w-full max-w-lg shadow-2xl animate-slide-up-fast" onClick={e => e.stopPropagation()}>
+            <CardHeader className="text-center relative">
+                <Button variant="ghost" size="icon" className="absolute top-4 right-4 rounded-full" onClick={onClose}><X size={20}/></Button>
+                <div className="relative mx-auto mt-4">
                     <Image
                         src={doctor.image}
                         alt={doctor.name}
                         width={128}
                         height={128}
-                        className={cn("rounded-full object-cover border-4 border-card shadow-lg", doctor.theme.border)}
+                        className={cn("rounded-full object-cover border-4 shadow-lg", doctor.theme.border)}
                     />
-                    {doctor.isEmergency && (
-                        <div className="absolute -top-1 -right-1">
-                            <Badge variant="destructive" className="flex items-center gap-1 text-base p-2">
-                                <AlertTriangle className="h-4 w-4" /> 24/7
-                            </Badge>
-                        </div>
-                    )}
                 </div>
-                <CardTitle className="font-headline text-2xl">{doctor.name}</CardTitle>
-                <p className={cn("font-semibold", doctor.theme.text)}>{doctor.specialty}</p>
+                <CardTitle className="font-headline text-3xl mt-4">{doctor.name}</CardTitle>
+                <p className={cn("font-semibold text-lg", doctor.theme.text)}>{doctor.specialty}</p>
                 <p className="text-sm text-muted-foreground">{doctor.qualifications}</p>
             </CardHeader>
-            <CardContent className="flex-grow space-y-4">
-                <div className="text-sm text-muted-foreground space-y-2">
-                    <p className="flex items-center gap-2"><Building2 className="h-4 w-4" /> <strong>Experience:</strong> {doctor.experience}</p>
-                    <p className="flex items-center gap-2"><Clock className="h-4 w-4" /> <strong>Availability:</strong> {doctor.availability}</p>
-                    <p className="flex items-center gap-2"><MapPin className="h-4 w-4" /> <strong>Location:</strong> {doctor.floor}</p>
-                </div>
-                <div className="flex gap-2">
-                    <Button className={cn("w-full", doctor.theme.bg, `hover:${doctor.theme.bg}/90`)}>
-                        <Calendar className="mr-2 h-4 w-4" /> Book Appointment
-                    </Button>
-                    <Button variant="outline" className="w-full">
-                        <Phone className="mr-2 h-4 w-4" /> Contact
-                    </Button>
+            <CardContent className="text-center space-y-4">
+                <p className="text-muted-foreground">{doctor.bio}</p>
+                <div className="text-sm text-muted-foreground space-y-2 border-t border-b border-border py-4">
+                    <p className="flex items-center justify-center gap-2"><Building2 className="h-4 w-4" /> <strong>Experience:</strong> {doctor.experience}</p>
+                    <p className="flex items-center justify-center gap-2"><Clock className="h-4 w-4" /> <strong>Availability:</strong> {doctor.availability}</p>
+                    <p className="flex items-center justify-center gap-2"><MapPin className="h-4 w-4" /> <strong>Location:</strong> {doctor.floor}</p>
                 </div>
             </CardContent>
-            <AnimatedFooter />
-        </Card>
-    );
-};
+            <CardFooter className="flex-col gap-2">
+                <Button className={cn("w-full", doctor.theme.bg)} size="lg">
+                    <Calendar className="mr-2 h-4 w-4" /> Book Appointment
+                </Button>
+                <Button variant="outline" className="w-full">
+                    <Phone className="mr-2 h-4 w-4" /> Contact
+                </Button>
+            </CardFooter>
+        </div>
+    </div>
+);
+
 
 export default function ClinicalCarePage() {
+  const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
+
   return (
-    <div className="space-y-8 animate-fade-in p-4 md:p-0">
-      <header className="mb-8 animate-slide-up">
-        <div className="flex items-center gap-4 mb-4">
+    <div className="min-h-full w-full bg-mesh-gradient animate-mesh-flow p-4 md:p-8">
+      <header className="mb-12 animate-slide-up text-center">
+        <div className="flex items-center justify-center gap-4 mb-2">
           <Image 
             src="/hospital_logo.png" 
             alt="Hospital Logo" 
             width={64}
             height={64}
-            className="w-16 h-16 object-contain rounded-lg"
+            className="w-16 h-16 object-contain rounded-lg bg-white/50 p-2 shadow-sm"
           />
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight font-headline animate-text-gradient bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Clinical Care Dashboard</h1>
-            <p className="text-muted-foreground mt-1 max-w-4xl">
-              Access specialized checkups and emergency care services from our trusted hospital partner, Sri Ramakrishna Hospital.
-            </p>
-          </div>
         </div>
+        <h1 className="text-4xl font-bold tracking-tight font-headline text-slate-800">Clinical Care Dashboard</h1>
+        <p className="text-slate-600 mt-2 max-w-2xl mx-auto">
+          Access specialized checkups and emergency care from our trusted hospital partner, Sri Ramakrishna Hospital.
+        </p>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {doctors.map((doctor, index) => (
-              <div key={index} className="animate-slide-up" style={{ animationDelay: `${200 + index * 100}ms` }}>
-                  <DoctorCard doctor={doctor} />
+              <div 
+                key={index} 
+                className="animate-slide-up cursor-pointer group" 
+                style={{ animationDelay: `${200 + index * 100}ms` }}
+                onClick={() => setSelectedDoctor(doctor)}
+              >
+                  <Card className="bg-white/60 backdrop-blur-lg border border-white/40 rounded-3xl h-full text-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+                    <CardContent className="p-8">
+                        <Image
+                            src={doctor.image}
+                            alt={doctor.name}
+                            width={128}
+                            height={128}
+                            className="rounded-full object-cover border-4 border-white shadow-lg mx-auto mb-4"
+                        />
+                         {doctor.isEmergency && (
+                            <Badge variant="destructive" className="mb-2">24/7 Emergency</Badge>
+                        )}
+                        <h3 className="font-headline text-xl font-semibold text-slate-900">{doctor.name}</h3>
+                        <p className={cn("font-medium text-sm", doctor.theme.text)}>{doctor.category}</p>
+                    </CardContent>
+                  </Card>
               </div>
           ))}
       </div>
+
+       {selectedDoctor && <DoctorDetailModal doctor={selectedDoctor} onClose={() => setSelectedDoctor(null)} />}
+
+       <div className="fixed bottom-0 left-0 w-full bg-[#004a99]/90 backdrop-blur-sm h-16 z-40 overflow-hidden">
+            <a href="https://www.sriramakrishnahospital.com" target="_blank" rel="noopener noreferrer" className="flex items-center h-full">
+                <p className="text-white font-semibold whitespace-nowrap animate-marquee-lr">
+                    <span className="mx-8">For more services, please visit: www.sriramakrishnahospital.com</span>
+                    <span className="mx-8">For more services, please visit: www.sriramakrishnahospital.com</span>
+                </p>
+            </a>
+       </div>
     </div>
   );
 }
+
+    

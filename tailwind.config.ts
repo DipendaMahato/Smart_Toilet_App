@@ -10,6 +10,9 @@ export default {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'mesh-gradient': 'linear-gradient(120deg, #e0f2fe 0%, #f0fdf4 50%, #fef2f2 100%)',
+      },
       borderRadius: {
         lg: `var(--radius)`,
         md: `calc(var(--radius) - 2px)`,
@@ -98,6 +101,10 @@ export default {
             from: { transform: 'translateY(20px)', opacity: '0'},
             to: { transform: 'translateY(0)', opacity: '1'},
         },
+        'slide-up-fast': {
+            from: { transform: 'translateY(20px)', opacity: '0'},
+            to: { transform: 'translateY(0)', opacity: '1'},
+        },
         'text-gradient': {
           'to': {
             'background-position': '200% center',
@@ -106,20 +113,35 @@ export default {
         'marquee': {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-lr': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        'mesh-flow': {
+          '0%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+          '100%': { 'background-position': '0% 50%' },
         }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'fade-in': 'fade-in 0.5s ease-out',
+        'fade-in': 'fade-in 0.5s ease-out forwards',
         'slide-up': 'slide-up 0.5s ease-out forwards',
+        'slide-up-fast': 'slide-up-fast 0.3s ease-out forwards',
         'text-gradient': 'text-gradient 3s linear infinite',
         'marquee': 'marquee 20s linear infinite',
+        'marquee-lr': 'marquee-lr 30s linear infinite',
+        'mesh-flow': 'mesh-flow 15s ease infinite',
       },
       boxShadow: {
         'soft': '0 4px 12px 0 rgba(0, 0, 0, 0.05)',
         'glow-teal': '0 0 15px 0 rgba(80, 200, 200, 0.3)',
-      }
+      },
+       backgroundSize: {
+        '400': '400% 400%',
+      },
     },
   },
   plugins: [
@@ -133,3 +155,5 @@ export default {
       },
   ],
 } satisfies Config;
+
+    
