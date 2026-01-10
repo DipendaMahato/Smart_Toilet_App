@@ -56,32 +56,39 @@ const ServiceDashboardCard = ({ title, icon: Icon, color, textColor, href }: typ
 export default function ClinicalCarePage() {
   return (
     <div className="space-y-8 animate-fade-in p-4 md:p-0">
-        <div className="relative w-full rounded-2xl overflow-hidden mb-8">
-            <Image 
-                src="https://images.unsplash.com/photo-1533042789716-e9a9c97cf4ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3NwaXRhbCUyMGJ1aWxkaW5nfGVufDB8fHx8MTc2NzkyODAxNXww&ixlib=rb-4.1.0&q=80&w=1080"
-                alt="Hospital Building"
-                width={1200}
-                height={400}
-                className="w-full h-auto object-cover"
-                data-ai-hint="hospital building"
-            />
-            <div className="absolute inset-0 bg-black/40" />
-            <div className="absolute top-4 left-4 p-2 bg-white/80 backdrop-blur-sm rounded-lg">
-                <Image
-                    src="https://picsum.photos/seed/hospitallogo/150/50"
-                    alt="Hospital Logo"
-                    width={150}
-                    height={50}
-                    data-ai-hint="hospital logo"
-                />
-            </div>
+        
+      {/* HEADER SECTION */}
+      <header className="flex flex-col md:flex-row items-center justify-between mb-10 bg-card p-6 rounded-2xl border border-border shadow-xl">
+        
+        {/* Hospital Branding */}
+        <div className="flex items-center gap-4">
+          <Image 
+            src="https://picsum.photos/seed/hospitallogo/64/64" 
+            alt="Hospital Logo" 
+            width={64}
+            height={64}
+            className="w-16 h-16 object-contain rounded-lg"
+            data-ai-hint="hospital logo"
+          />
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight font-headline">CLINICAL CARE</h1>
+            <p className="text-teal-400 text-sm font-medium uppercase tracking-widest">Hospital Services</p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-4 animate-slide-up">
-            <ShieldPlus className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-headline font-bold">CLINICAL CARE & HOSPITAL SERVICES</h1>
+        {/* Hospital Hero Banner */}
+        <div className="mt-4 md:mt-0 overflow-hidden rounded-xl border border-border w-full md:w-1/3">
+          <Image 
+            src="https://images.unsplash.com/photo-1533042789716-e9a9c97cf4ee?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxob3NwaXRhbCUyMGJ1aWxkaW5nfGVufDB8fHx8MTc2NzkyODAxNXww&ixlib=rb-4.1.0&q=80&w=1080" 
+            alt="Sri Ramakrishna Hospital" 
+            width={400}
+            height={96}
+            className="w-full h-24 object-cover opacity-80 hover:opacity-100 transition-opacity"
+            data-ai-hint="hospital building"
+          />
         </div>
-        
+      </header>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
             {services.map((service, index) => (
                 <ServiceDashboardCard key={index} {...service} />
