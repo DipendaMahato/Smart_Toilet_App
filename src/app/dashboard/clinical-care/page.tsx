@@ -20,7 +20,7 @@ const doctors = [
         floor: 'Ground floor',
         bio: 'Dr. A. Arthi is a highly respected physician with over a decade of experience in general medicine. She is known for her compassionate approach and dedication to providing comprehensive care.',
         theme: {
-            border: 'border-blue-500/30',
+            border: 'border-blue-500',
             shadow: 'shadow-blue-500/20',
             text: 'text-blue-500',
             bg: 'bg-blue-500'
@@ -37,7 +37,7 @@ const doctors = [
         floor: 'First Floor – (Multi-Speciality)',
         bio: 'Dr. Suresh is a leading expert in diabetology and endocrinology, with nearly three decades of experience in managing complex hormonal and metabolic disorders.',
         theme: {
-            border: 'border-indigo-500/30',
+            border: 'border-indigo-500',
             shadow: 'shadow-indigo-500/20',
             text: 'text-indigo-500',
             bg: 'bg-indigo-500'
@@ -54,7 +54,7 @@ const doctors = [
         floor: 'First Floor – (Multi-Speciality)',
         bio: 'A specialist in gastroenterology and hepatology, Dr. Arulselvan is skilled in diagnosing and treating a wide array of digestive and liver-related conditions.',
         theme: {
-            border: 'border-emerald-500/30',
+            border: 'border-emerald-500',
             shadow: 'shadow-emerald-500/20',
             text: 'text-emerald-500',
             bg: 'bg-emerald-500'
@@ -71,7 +71,7 @@ const doctors = [
         floor: 'Ground Floor – (Multi-Speciality)',
         bio: 'Dr. N. Manjunathan leads a dedicated team of emergency physicians, nurses, and support staff, available 24/7. Our state-of-the-art emergency department is equipped to handle all medical emergencies, from minor injuries to life-threatening conditions, ensuring rapid diagnosis and treatment.',
         theme: {
-            border: 'border-red-500/30',
+            border: 'border-red-500',
             shadow: 'shadow-red-500/20',
             text: 'text-red-500',
             bg: 'bg-red-500'
@@ -150,7 +150,12 @@ export default function ClinicalCarePage() {
                 style={{ animationDelay: `${200 + index * 100}ms` }}
                 onClick={() => setSelectedDoctor(doctor)}
               >
-                  <Card className="bg-white/60 backdrop-blur-lg border border-white/40 rounded-3xl h-full text-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl">
+                  <Card className={cn(
+                    "bg-white/60 backdrop-blur-lg border-4 rounded-3xl h-full text-center transition-all duration-300",
+                    "group-hover:scale-105 group-hover:shadow-2xl",
+                    doctor.theme.border,
+                    doctor.theme.shadow
+                  )}>
                     <CardContent className="p-8">
                         <Image
                             src={doctor.image}
