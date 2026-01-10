@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Wifi, Bluetooth, Palette, Languages, Bell, FileDown, ShieldCheck, Lock } from "lucide-react";
+import { Wifi, Bluetooth, Palette, Languages, Bell, FileDown, ShieldCheck, Lock, Mail, Phone, LifeBuoy } from "lucide-react";
 
 export function SettingsTabs() {
   const [biometric, setBiometric] = useState(false);
@@ -45,11 +45,12 @@ export function SettingsTabs() {
 
   return (
     <Tabs defaultValue="account" className="w-full">
-      <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
+      <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
         <TabsTrigger value="account">Account</TabsTrigger>
         <TabsTrigger value="preferences">Preferences</TabsTrigger>
         <TabsTrigger value="notifications">Notifications</TabsTrigger>
         <TabsTrigger value="data">Data & AI</TabsTrigger>
+        <TabsTrigger value="support">Support</TabsTrigger>
       </TabsList>
 
       <TabsContent value="account">
@@ -222,6 +223,37 @@ export function SettingsTabs() {
             <Button><FileDown className="mr-2"/> Export My Health Report</Button>
             <p className="text-xs text-muted-foreground">Export a PDF of your complete health data and insights.</p>
           </CardFooter>
+        </Card>
+      </TabsContent>
+
+      <TabsContent value="support">
+        <Card className="rounded-2xl">
+          <CardHeader>
+            <CardTitle className="font-headline">Contact & Support</CardTitle>
+            <CardDescription>
+              Get help with the app or provide feedback.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4 text-muted-foreground">
+            <div className="flex items-center gap-3">
+                <Mail className="h-5 w-5" />
+                <a href="mailto:smarttoiletapp5@gmail.com" className="hover:text-primary">
+                    smarttoiletapp5@gmail.com
+                </a>
+            </div>
+            <div className="flex items-center gap-3">
+                <Phone className="h-5 w-5" />
+                 <a href="tel:+916201158797" className="hover:text-primary">
+                    +91 6201158797
+                </a>
+            </div>
+            <div>
+                <p>Support Hours: Mon–Sat, 9 AM – 6 PM</p>
+            </div>
+            <div className="pt-4 text-sm">
+                <p>Developed by Dipendra Mahato (Team Smart Toilet)</p>
+            </div>
+        </CardContent>
         </Card>
       </TabsContent>
     </Tabs>
