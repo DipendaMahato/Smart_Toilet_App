@@ -28,7 +28,7 @@ export default function GeneralHealthCheckupPage() {
                     <CardContent className="flex flex-col items-center">
                          <div className="relative mb-4">
                             <Image
-                                src="/Dr. A. Arthi.webp"
+                                src="/Dr. A. Arthi.png"
                                 alt="Dr. A. Arthi"
                                 width={150}
                                 height={150}
