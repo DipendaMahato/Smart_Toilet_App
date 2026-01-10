@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Phone } from 'lucide-react';
+import { Calendar, Clock, MapPin, Phone } from 'lucide-react';
 
 export default function GeneralHealthCheckupPage() {
   return (
@@ -38,8 +38,8 @@ export default function GeneralHealthCheckupPage() {
                          </div>
                         <h3 className="text-2xl font-bold font-headline">Dr. A. Arthi</h3>
                         <p className="text-primary font-semibold">Lead Consultant - General Health</p>
-                        <p className="text-sm text-muted-foreground mt-2">MBBS, MD (General Medicine)</p>
-                        <p className="text-sm text-muted-foreground">12+ Years of Experience</p>
+                        <p className="text-sm text-muted-foreground mt-2">MBBS, MD, DNB (Gen. Med), MRCP(UK)</p>
+                        <p className="text-sm text-muted-foreground">8+ Years of Experience</p>
 
                         <div className="mt-6 w-full space-y-3">
                             <Button className="w-full">
@@ -72,11 +72,11 @@ export default function GeneralHealthCheckupPage() {
                     <CardContent className="space-y-3">
                         <div className="flex items-center gap-4 text-muted-foreground">
                             <Clock className="h-5 w-5 text-primary"/>
-                            <span>Monday - Friday: 9:00 AM - 5:00 PM</span>
+                            <span>MON - SAT: 08:00 AM – 05:00 PM</span>
                         </div>
                          <div className="flex items-center gap-4 text-muted-foreground">
-                            <Clock className="h-5 w-5 text-primary"/>
-                            <span>Saturday: 9:00 AM - 1:00 PM</span>
+                            <MapPin className="h-5 w-5 text-primary"/>
+                            <span>Ground Floor</span>
                         </div>
                     </CardContent>
                 </Card>
