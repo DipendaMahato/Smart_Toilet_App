@@ -34,7 +34,7 @@ const services = [
         icon: Siren,
         color: 'border-red-400',
         textColor: 'text-red-400',
-        href: '#',
+        href: '/dashboard/emergency-care',
     },
 ];
 
