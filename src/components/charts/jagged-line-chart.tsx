@@ -1,3 +1,4 @@
+
 'use client';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { useState, useEffect } from 'react';
@@ -27,7 +28,7 @@ export function JaggedLineChart() {
                 <Line
                     type="monotone"
                     dataKey="uv"
-                    stroke="#F87171" // red-400
+                    stroke="#4ade80" // green-400
                     strokeWidth={2}
                     dot={false}
                     isAnimationActive={false}

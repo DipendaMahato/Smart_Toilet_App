@@ -6,7 +6,7 @@ import { CircularGauge } from '@/components/charts/circular-gauge';
 import { SemiCircleGauge } from '@/components/charts/semi-circle-gauge';
 import { TinyAreaChart } from '@/components/charts/tiny-area-chart';
 import { JaggedLineChart } from '@/components/charts/jagged-line-chart';
-import { AlertTriangle, BatteryFull, Droplet, Gauge, Signal, Wifi, Clock, Calendar, Zap, FlaskConical } from 'lucide-react';
+import { ShieldCheck, BatteryFull, Droplet, Gauge, Signal, Wifi, Clock, Calendar, Zap, FlaskConical } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { Switch } from '@/components/ui/switch';
@@ -70,10 +70,10 @@ export default function LiveSensorDataPage() {
                     <p className="text-xs text-gray-500 mt-4">Available: {Math.round(usageStatus)}</p>
                 </SensorCard>
 
-                <SensorCard className="border-red-500/50 shadow-red-500/20 lg:col-span-1 flex flex-col items-center justify-center animate-slide-up" style={{ animationDelay: '300ms' }}>
-                     <h3 className="font-semibold text-red-400 mb-2">Leakage Alert Status</h3>
-                     <AlertTriangle className="text-red-500 h-10 w-10" />
-                     <p className="text-sm font-bold text-red-400 my-2">CRITICAL LEAK DETECTED!</p>
+                <SensorCard className="border-green-500/50 shadow-green-500/20 lg:col-span-1 flex flex-col items-center justify-center animate-slide-up" style={{ animationDelay: '300ms' }}>
+                     <h3 className="font-semibold text-green-400 mb-2">Leakage Alert Status</h3>
+                     <ShieldCheck className="text-green-500 h-10 w-10" />
+                     <p className="text-sm font-bold text-green-400 my-2">CRITICAL LEAK NOT DETECTED!</p>
                      <div className="w-full h-16">
                         <JaggedLineChart />
                      </div>
