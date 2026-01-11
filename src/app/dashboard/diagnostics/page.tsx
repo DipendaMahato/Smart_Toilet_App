@@ -87,7 +87,7 @@ export default function DiagnosticsPage() {
             </div>
 
             <div className="space-y-6 animate-slide-up" style={{ animationDelay: '400ms' }}>
-                <h2 className="text-xl font-headline font-semibold text-gray-300">AI Health Summary & Combined Diagnostics</h2>
+                <h2 className="text-xl font-headline font-semibold text-gray-300">Health Summary & Combined Diagnostics</h2>
                 <div className="bg-white/5 border border-teal-500/30 rounded-2xl p-6 shadow-lg shadow-teal-500/10 relative">
                     <div className="absolute inset-0 rounded-2xl border-2 border-teal-500/50 animate-pulse" style={{ pointerEvents: 'none' }}></div>
                     <p className="text-gray-400">
