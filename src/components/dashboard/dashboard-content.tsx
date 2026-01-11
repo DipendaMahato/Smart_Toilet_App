@@ -38,7 +38,7 @@ const subDashboards = [
     shadowColor: 'shadow-glow-purple-violet/20',
     bgColor: 'bg-gradient-to-br from-glow-purple-violet-start/20 to-glow-purple-violet-end/20',
     textColor: 'text-glow-purple-violet',
-    animation: 'animate-rotate-glow',
+    animation: 'animate-pulse-glow-soft',
   },
   {
     title: 'Urine & Stool Diagnostics',

@@ -113,8 +113,9 @@ export default {
           '100%': { 'background-position': '200% 0' },
         },
         'rotate-glow': {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
+          '0%': { transform: 'rotate(0deg)', opacity: '0.7' },
+          '50%': { opacity: '1' },
+          '100%': { transform: 'rotate(360deg)', opacity: '0.7' },
         },
         'orbit-glow': {
           '0%': { 'border-color': 'hsl(var(--glow-teal-green) / 0.2)', transform: 'scale(1)' },
@@ -149,7 +150,7 @@ export default {
         'flow-border': 'flow-border 4s ease-in-out infinite',
         'pulse-glow-soft': 'pulse-glow-soft 3s ease-in-out infinite',
         'light-trace': 'light-trace 4s linear infinite',
-        'rotate-glow': 'rotate-glow 10s linear infinite',
+        'rotate-glow': 'rotate-glow 10s linear infinite alternate',
         'orbit-glow': 'orbit-glow 5s ease-in-out infinite',
         'heartbeat-pulse': 'heartbeat-pulse 2s infinite',
         'breathing-glow': 'breathing-glow 4s ease-in-out infinite',
