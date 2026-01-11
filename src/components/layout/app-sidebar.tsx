@@ -79,7 +79,8 @@ export default function AppSidebar() {
           )})}
         </nav>
       </div>
-      <div className="mt-auto border-t border-border/20 p-4">
+      <div className="mt-auto border-t border-border/20 p-4 relative">
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-glow-green via-glow-cyan to-glow-blue animate-flow-border bg-[length:400%_100%]" />
         <div className="flex items-center gap-4">
             <Avatar>
                 <AvatarImage src={user?.photoURL || undefined} alt="User avatar" />
@@ -100,3 +101,4 @@ export default function AppSidebar() {
     </aside>
   );
 }
+
