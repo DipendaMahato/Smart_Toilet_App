@@ -147,6 +147,10 @@ export default {
           '0%, 100%': { 'box-shadow': '0 0 5px hsl(var(--glow-red-rose))', 'border-color': 'hsl(var(--glow-red-rose) / 0.5)'},
           '50%': { 'box-shadow': '0 0 15px hsl(var(--glow-red-rose))', 'border-color': 'hsl(var(--glow-red-rose) / 1)' },
         },
+        'tilt': {
+          '0%, 100%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(0.5deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -167,6 +171,7 @@ export default {
         'heartbeat-pulse': 'heartbeat-pulse 2s infinite',
         'breathing-glow': 'breathing-glow 4s ease-in-out infinite',
         'alert-glow': 'alert-glow 3s ease-in-out infinite',
+        'tilt': 'tilt 10s infinite linear',
       },
       boxShadow: {
         'soft': '0 4px 12px 0 rgba(0, 0, 0, 0.05)',
