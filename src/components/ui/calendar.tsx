@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -18,6 +19,7 @@ function Calendar({
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      weekStartsOn={0} // Start week on Sunday
       className={cn("p-3", className)}
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
