@@ -7,6 +7,13 @@ import { DayPicker } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -16,6 +23,18 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const handleYearChange = (value: string) => {
+    const newDate = new Date(props.month || new Date());
+    newDate.setFullYear(parseInt(value, 10));
+    props.onMonthChange?.(newDate);
+  };
+  
+  const handleMonthChange = (value: string) => {
+    const newDate = new Date(props.month || new Date());
+    newDate.setMonth(parseInt(value, 10));
+    props.onMonthChange?.(newDate);
+  };
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -24,8 +43,8 @@ function Calendar({
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
         caption: "flex justify-center pt-1 relative items-center",
-        caption_label: "text-sm font-medium",
-        caption_dropdowns: "flex justify-center gap-1",
+        caption_label: "hidden", // Hide default label
+        caption_dropdowns: "flex gap-2", // Container for dropdowns
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
@@ -35,8 +54,7 @@ function Calendar({
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-y-1",
         head_row: "flex",
-        head_cell:
-          "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
+        head_cell: "text-muted-foreground rounded-md w-9 font-normal text-[0.8rem]",
         row: "flex w-full mt-2",
         cell: "h-9 w-9 text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
@@ -56,13 +74,58 @@ function Calendar({
         ...classNames,
       }}
       components={{
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        IconLeft: () => <ChevronLeft className="h-4 w-4" />,
+        IconRight: () => <ChevronRight className="h-4 w-4" />,
+        Caption: ({ ...props }) => {
+          const { fromYear, fromMonth, fromDate, toYear, toMonth, toDate } = useDayPicker();
+          const currentYear = new Date().getFullYear();
+          const years = Array.from({ length: (fromYear || 1900) - (toYear || currentYear) + 1 }, (_, i) => (toYear || currentYear) + i).reverse();
+          const months = Array.from({ length: 12 }, (_, i) => i);
+
+          return (
+             <div className="flex justify-center gap-2 mb-2">
+                <Select
+                  value={props.displayMonth.getMonth().toString()}
+                  onValueChange={handleMonthChange}
+                >
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {months.map(month => (
+                      <SelectItem key={month} value={month.toString()}>
+                        {format(new Date(0, month), 'MMMM')}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select
+                   value={props.displayMonth.getFullYear().toString()}
+                   onValueChange={handleYearChange}
+                >
+                  <SelectTrigger className="w-[80px]">
+                    <SelectValue/>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {years.map(year => (
+                      <SelectItem key={year} value={year.toString()}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+            </div>
+          )
+        }
       }}
       {...props}
     />
   )
 }
 Calendar.displayName = "Calendar"
+
+// Helper hook from react-day-picker
+import { useDayPicker } from "react-day-picker";
+import { format } from "date-fns";
 
 export { Calendar }
