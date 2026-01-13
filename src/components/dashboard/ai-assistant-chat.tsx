@@ -67,7 +67,7 @@ export function AiAssistantChat() {
             <CardTitle className="flex items-center gap-2 font-headline text-xl text-transparent bg-clip-text bg-gradient-to-r from-glow-purple-violet to-glow-cyan animate-text-gradient bg-400">
             <Bot /> Ask with AI Assistance
             </CardTitle>
-            <CardDescription>Get answers to your health and product questions.</CardDescription>
+            <CardDescription className="text-glow-cyan-blue/80">Get answers to your health and product questions.</CardDescription>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col gap-4 overflow-hidden">
             <ScrollArea className="flex-1 pr-4" ref={scrollAreaRef}>
