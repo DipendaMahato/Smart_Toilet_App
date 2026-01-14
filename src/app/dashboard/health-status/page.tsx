@@ -185,11 +185,11 @@ export default function HealthStatusPage() {
       <div className="animate-slide-up" style={{ animationDelay: '400ms' }}>
          <Card className="bg-card/50 border border-primary/20">
             <CardHeader>
-                <CardTitle className="font-headline text-center">AI Clinical Health Conclusion</CardTitle>
+                <CardTitle className="font-headline text-center">Clinical Health Conclusion</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div>
-                    <h3 className="font-semibold text-primary">AI Summary:</h3>
+                    <h3 className="font-semibold text-primary">Summary:</h3>
                     <p className="text-sm text-muted-foreground mt-1">
                         Based on recent urine and stool analyses, your overall physiological markers are stable. Minor, non-critical fluctuations in hydration and certain metabolic indicators were noted, but remain within a healthy range. Your current health risk level is low. We recommend consistent annual check-ups.
                     </p>
