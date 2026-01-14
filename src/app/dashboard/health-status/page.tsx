@@ -183,8 +183,8 @@ export default function HealthStatusPage() {
         </p>
       </div>
 
-      <div className="animate-slide-up" style={{ animationDelay: '200ms' }}>
-        <h2 className="text-center text-xl font-headline font-semibold mb-4">System Health Summary</h2>
+      <div className="animate-slide-up text-center" style={{ animationDelay: '200ms' }}>
+        <h2 className="text-xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent animate-text-gradient bg-400 mb-4">System Health Summary</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {summaryCards.map((card) => (
             <HealthStatusCard key={card.title} {...card} />
