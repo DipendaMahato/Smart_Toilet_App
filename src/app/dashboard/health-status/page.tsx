@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { Droplets, ShieldCheck, Heart, FileText, Bone, Activity } from 'lucide-react';
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { DownloadableReport } from '@/components/insights/downloadable-report';
+import { useUser, useFirestore } from '@/firebase';
+import { doc, getDoc, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 const summaryCards = [
   {
@@ -70,8 +73,64 @@ const HealthStatusCard = ({
 );
 
 export default function HealthStatusPage() {
+  const reportRef = useRef<HTMLDivElement>(null);
+  const [reportData, setReportData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const { user } = useUser();
+  const firestore = useFirestore();
+
+  const handleDownload = async () => {
+      if (!user || !firestore) {
+          alert("User not logged in or database not available.");
+          return;
+      }
+      setLoading(true);
+
+      try {
+          // 1. Fetch User Profile
+          const userDocRef = doc(firestore, 'users', user.uid);
+          const userDocSnap = await getDoc(userDocRef);
+          const userData = userDocSnap.exists() ? userDocSnap.data() : null;
+
+          // 2. Fetch Latest Health Data
+          const healthDataColRef = collection(firestore, 'users', user.uid, 'healthData');
+          const q = query(healthDataColRef, orderBy('timestamp', 'desc'), limit(1));
+          const healthQuerySnap = await getDocs(q);
+          const latestHealthData = !healthQuerySnap.empty ? healthQuerySnap.docs[0].data() : null;
+          
+          setReportData({ user: userData, health: latestHealthData });
+
+          // Wait for state to update and DOM to render
+          setTimeout(() => {
+              const element = reportRef.current;
+              if (element && window.html2pdf) {
+                   const opt = {
+                      margin: [0.5, 0.5],
+                      filename: `Health_Report_${user.displayName?.replace(' ', '_') || 'User'}.pdf`,
+                      image: { type: 'jpeg', quality: 0.98 },
+                      html2canvas: { scale: 2, useCORS: true },
+                      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                  };
+                  window.html2pdf().set(opt).from(element).save();
+              }
+              setLoading(false);
+          }, 100);
+
+      } catch (error) {
+          console.error("Error generating report:", error);
+          alert("Failed to generate report.");
+          setLoading(false);
+      }
+  };
+
+
   return (
     <div className="space-y-8 animate-fade-in">
+      {/* Report Download Component (Hidden) */}
+      <div className="hidden">
+          <DownloadableReport ref={reportRef} data={reportData} />
+      </div>
+
       {/* Overall Health Score */}
       <div className="text-center animate-slide-up">
         <div className="relative inline-block">
@@ -149,7 +208,7 @@ export default function HealthStatusPage() {
                     </ul>
                 </div>
                 <div className="text-center pt-4">
-                    <Button variant="outline">
+                    <Button onClick={handleDownload} loading={loading}>
                         <FileText className="mr-2 h-4 w-4" />
                         Download Detailed Health Report
                     </Button>

@@ -1,12 +1,20 @@
+
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'Smart Toilet for Real time Health Monitoring',
   description: 'Smart Toilet for Real Time Monitoring',
 };
+
+declare global {
+    interface Window {
+        html2pdf: any;
+    }
+}
 
 export default function RootLayout({
   children,
@@ -29,6 +37,7 @@ export default function RootLayout({
           {children}
           <Toaster />
         </FirebaseClientProvider>
+        <Script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" strategy="afterInteractive" />
       </body>
     </html>
   );
