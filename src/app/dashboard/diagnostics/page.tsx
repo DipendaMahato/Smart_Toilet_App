@@ -69,7 +69,7 @@ export default function DiagnosticsPage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <div className="space-y-6 animate-slide-up" style={{ animationDelay: '200ms' }}>
-                    <h2 className="text-xl font-headline font-semibold text-gray-300">Urine Diagnosis Results</h2>
+                    <h2 className="text-xl font-headline font-semibold text-glow-teal-green">Urine Diagnosis Results</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {urineDiagnostics.map((item, index) => (
                             <DiagnosticCard key={index} {...item} />
@@ -77,7 +77,7 @@ export default function DiagnosticsPage() {
                     </div>
                 </div>
                 <div className="space-y-6 animate-slide-up" style={{ animationDelay: '300ms' }}>
-                    <h2 className="text-xl font-headline font-semibold text-gray-300">Stool Diagnosis Results</h2>
+                    <h2 className="text-xl font-headline font-semibold text-glow-lime-emerald">Stool Diagnosis Results</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {stoolDiagnostics.map((item, index) => (
                             <DiagnosticCard key={index} {...item} />
