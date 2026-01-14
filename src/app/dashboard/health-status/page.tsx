@@ -105,16 +105,16 @@ export default function HealthStatusPage() {
               const element = reportRef.current;
               if (element && window.html2pdf) {
                    const opt = {
-                      margin: [0.5, 0.5],
-                      filename: `Health_Report_${user.displayName?.replace(' ', '_') || 'User'}.pdf`,
-                      image: { type: 'jpeg', quality: 0.98 },
-                      html2canvas: { scale: 2, useCORS: true },
-                      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                      margin:       [0.5, 0.2],
+                      filename:     `Health_Report_${user.displayName?.replace(' ', '_') || 'User'}.pdf`,
+                      image:        { type: 'jpeg', quality: 0.98 },
+                      html2canvas:  { scale: 2, useCORS: true, logging: false },
+                      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                   };
-                  window.html2pdf().set(opt).from(element).save();
+                  window.html2pdf().from(element).set(opt).save();
               }
               setLoading(false);
-          }, 100);
+          }, 500); // Increased timeout to ensure data is populated
 
       } catch (error) {
           console.error("Error generating report:", error);
@@ -128,7 +128,9 @@ export default function HealthStatusPage() {
     <div className="space-y-8 animate-fade-in">
       {/* Report Download Component (Hidden) */}
       <div className="hidden">
+        <div id="report-container">
           <DownloadableReport ref={reportRef} data={reportData} />
+        </div>
       </div>
 
       {/* Overall Health Score */}
