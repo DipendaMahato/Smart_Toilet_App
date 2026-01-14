@@ -195,7 +195,7 @@ export default function HealthStatusPage() {
       <div className="animate-slide-up" style={{ animationDelay: '400ms' }}>
          <Card className="bg-card/50 border border-primary/20">
             <CardHeader>
-                <CardTitle className="font-headline text-center">Clinical Health Conclusion</CardTitle>
+                <CardTitle className="font-headline text-center text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent animate-text-gradient bg-400">Clinical Health Conclusion</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div>
