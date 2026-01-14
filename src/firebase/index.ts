@@ -5,6 +5,7 @@ import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage';
+import { getDatabase } from 'firebase/database';
 
 // IMPORTANT: DO NOT MODIFY THIS FUNCTION
 export function initializeFirebase() {
@@ -39,6 +40,7 @@ export function getSdks(firebaseApp: FirebaseApp) {
     auth: getAuth(firebaseApp),
     firestore: getFirestore(firebaseApp),
     storage: getStorage(firebaseApp),
+    database: getDatabase(firebaseApp),
   };
 }
 
@@ -47,6 +49,7 @@ export * from './client-provider';
 export * from './firestore/use-collection';
 export * from './firestore/use-doc';
 export * from './storage/use-storage';
+export * from './rtdb/use-rtdb-value';
 export * from './non-blocking-updates';
 export * from './non-blocking-login';
 export * from './errors';
