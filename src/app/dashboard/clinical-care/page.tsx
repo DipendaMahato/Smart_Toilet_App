@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 const doctors = [
     {
@@ -109,9 +110,11 @@ const DoctorDetailModal = ({ doctor, onClose }: { doctor: Doctor; onClose: () =>
                 </div>
             </CardContent>
             <CardFooter className="flex-col gap-2">
-                <Button className={cn("w-full", doctor.theme.bg)} size="lg">
-                    <Calendar className="mr-2 h-4 w-4" /> Book Appointment
-                </Button>
+                <a href="https://www.sriramakrishnahospital.com/doctors/#wpforms-form-51" target="_blank" rel="noopener noreferrer" className="w-full">
+                    <Button className={cn("w-full", doctor.theme.bg)} size="lg">
+                        <Calendar className="mr-2 h-4 w-4" /> Book Appointment
+                    </Button>
+                </a>
                 <Button variant="outline" className="w-full">
                     <Phone className="mr-2 h-4 w-4" /> Contact
                 </Button>
