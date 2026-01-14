@@ -24,25 +24,97 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Wifi, Bluetooth, Palette, Languages, Bell, FileDown, ShieldCheck, Lock, Mail, Phone, LifeBuoy } from "lucide-react";
+import { useFirestore, useUser, useMemoFirebase } from "@/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useToast } from "@/hooks/use-toast";
+
+type Preferences = {
+    theme: string;
+    language: string;
+    units: string;
+    biometric: boolean;
+    appLock: boolean;
+    emergencyAlerts: boolean;
+    insightAlerts: boolean;
+    weeklySummary: boolean;
+    wifiSync: boolean;
+    bluetoothSync: boolean;
+    aiSensitivity: string;
+};
 
 export function SettingsTabs() {
-  const [biometric, setBiometric] = useState(false);
-  const [appLock, setAppLock] = useState(false);
-  const [emergencyAlerts, setEmergencyAlerts] = useState(false);
-  const [insightAlerts, setInsightAlerts] = useState(false);
-  const [weeklySummary, setWeeklySummary] = useState(false);
-  const [wifiSync, setWifiSync] = useState(false);
-  const [bluetoothSync, setBluetoothSync] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const { toast } = useToast();
+  
   const [isClient, setIsClient] = useState(false);
-  const { setTheme, theme } = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [preferences, setPreferences] = useState<Partial<Preferences>>({
+    theme: 'system',
+    language: 'en',
+    units: 'metric',
+    aiSensitivity: 'balanced',
+    appLock: true,
+    emergencyAlerts: true,
+    insightAlerts: true,
+    wifiSync: true,
+  });
+
+  const profileRef = useMemoFirebase(() => {
+    if (!firestore || !user?.uid) return null;
+    return doc(firestore, "users", user.uid);
+  }, [firestore, user?.uid]);
 
   useEffect(() => {
     setIsClient(true);
-    setAppLock(true);
-    setEmergencyAlerts(true);
-    setInsightAlerts(true);
-    setWifiSync(true);
-  }, []);
+    if (user && !isUserLoading && profileRef) {
+        const fetchPreferences = async () => {
+            const docSnap = await getDoc(profileRef);
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if (data.preferences) {
+                    setPreferences(prev => ({ ...prev, ...data.preferences }));
+                    if (data.preferences.theme) {
+                        setTheme(data.preferences.theme);
+                    }
+                }
+            }
+        };
+        fetchPreferences();
+    }
+  }, [user, isUserLoading, profileRef, setTheme]);
+
+  const handleSwitchChange = (key: keyof Preferences) => (checked: boolean) => {
+      setPreferences(prev => ({...prev, [key]: checked}));
+  };
+
+  const handleSelectChange = (key: keyof Preferences) => (value: string) => {
+      setPreferences(prev => ({...prev, [key]: value}));
+      if (key === 'theme') {
+          setTheme(value);
+      }
+  };
+
+  const handleSave = async () => {
+      if (!profileRef) return;
+      setLoading(true);
+      try {
+          await setDoc(profileRef, { preferences }, { merge: true });
+          toast({
+              title: "Success",
+              description: "Your preferences have been saved.",
+          });
+      } catch (error: any) {
+          toast({
+              variant: "destructive",
+              title: "Error",
+              description: "Failed to save preferences: " + error.message,
+          });
+      } finally {
+          setLoading(false);
+      }
+  };
 
 
   return (
@@ -77,18 +149,18 @@ export function SettingsTabs() {
                     <Label className="text-base flex items-center gap-2"><ShieldCheck/> Biometric Login</Label>
                     <p className="text-sm text-muted-foreground">Use your fingerprint or face to log in.</p>
                 </div>
-                {isClient && <Switch id="biometric" checked={biometric} onCheckedChange={setBiometric} />}
+                {isClient && <Switch id="biometric" checked={preferences.biometric} onCheckedChange={handleSwitchChange('biometric')} />}
             </div>
             <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base flex items-center gap-2"><Lock/> App Lock</Label>
                     <p className="text-sm text-muted-foreground">Require authentication every time you open the app.</p>
                 </div>
-                {isClient && <Switch id="app-lock" checked={appLock} onCheckedChange={setAppLock} />}
+                {isClient && <Switch id="app-lock" checked={preferences.appLock} onCheckedChange={handleSwitchChange('appLock')} />}
             </div>
           </CardContent>
           <CardFooter>
-            <Button>Save Password</Button>
+            <Button onClick={handleSave} loading={loading}>Save Security Settings</Button>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -104,7 +176,7 @@ export function SettingsTabs() {
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2"><Palette/> Theme</Label>
-                <Select onValueChange={setTheme} value={theme}>
+                <Select onValueChange={handleSelectChange('theme')} value={preferences.theme}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select theme" />
                     </SelectTrigger>
@@ -117,20 +189,19 @@ export function SettingsTabs() {
             </div>
             <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2"><Languages/> Language</Label>
-                <Select defaultValue="en">
+                <Select onValueChange={handleSelectChange('language')} value={preferences.language}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select language" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="en">English</SelectItem>
-                        <SelectItem value="es">Español</SelectItem>
-                        <SelectItem value="fr">Français</SelectItem>
+                        <SelectItem value="hi">Hindi</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
              <div className="flex items-center justify-between">
                 <Label>Measurement Units</Label>
-                <Select defaultValue="metric">
+                <Select onValueChange={handleSelectChange('units')} value={preferences.units}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select units" />
                     </SelectTrigger>
@@ -142,7 +213,7 @@ export function SettingsTabs() {
             </div>
           </CardContent>
            <CardFooter>
-            <Button>Save Preferences</Button>
+            <Button onClick={handleSave} loading={loading}>Save Preferences</Button>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -161,25 +232,25 @@ export function SettingsTabs() {
                     <Label className="text-base flex items-center gap-2"><Bell className="text-status-red"/> Emergency Alerts</Label>
                     <p className="text-sm text-muted-foreground">Receive critical health alerts immediately.</p>
                 </div>
-                {isClient && <Switch id="emergency-alerts" checked={emergencyAlerts} onCheckedChange={setEmergencyAlerts}/>}
+                {isClient && <Switch id="emergency-alerts" checked={preferences.emergencyAlerts} onCheckedChange={handleSwitchChange('emergencyAlerts')}/>}
             </div>
             <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base">New Insight Alerts</Label>
                     <p className="text-sm text-muted-foreground">Get notified when new AI insights are ready.</p>
                 </div>
-                {isClient && <Switch id="insight-alerts" checked={insightAlerts} onCheckedChange={setInsightAlerts} />}
+                {isClient && <Switch id="insight-alerts" checked={preferences.insightAlerts} onCheckedChange={handleSwitchChange('insightAlerts')} />}
             </div>
              <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base">Weekly Summary</Label>
                     <p className="text-sm text-muted-foreground">Receive a summary of your health trends every week.</p>
                 </div>
-                {isClient && <Switch id="weekly-summary" checked={weeklySummary} onCheckedChange={setWeeklySummary} />}
+                {isClient && <Switch id="weekly-summary" checked={preferences.weeklySummary} onCheckedChange={handleSwitchChange('weeklySummary')} />}
             </div>
           </CardContent>
           <CardFooter>
-            <Button>Save Notifications</Button>
+            <Button onClick={handleSave} loading={loading}>Save Notifications</Button>
           </CardFooter>
         </Card>
       </TabsContent>
@@ -198,18 +269,18 @@ export function SettingsTabs() {
                     <Label className="text-base flex items-center gap-2"><Wifi/> Wi-Fi Sync</Label>
                     <p className="text-sm text-muted-foreground">Sync data automatically over Wi-Fi.</p>
                 </div>
-                {isClient && <Switch id="wifi-sync" checked={wifiSync} onCheckedChange={setWifiSync}/>}
+                {isClient && <Switch id="wifi-sync" checked={preferences.wifiSync} onCheckedChange={handleSwitchChange('wifiSync')}/>}
             </div>
              <div className="flex items-center justify-between space-x-2 rounded-xl border p-4">
                 <div className="space-y-0.5">
                     <Label className="text-base flex items-center gap-2"><Bluetooth/> Bluetooth Sync</Label>
                     <p className="text-sm text-muted-foreground">Allow data sync via Bluetooth when Wi-Fi is unavailable.</p>
                 </div>
-                {isClient && <Switch id="bluetooth-sync" checked={bluetoothSync} onCheckedChange={setBluetoothSync} />}
+                {isClient && <Switch id="bluetooth-sync" checked={preferences.bluetoothSync} onCheckedChange={handleSwitchChange('bluetoothSync')} />}
             </div>
             <div className="space-y-2">
                 <Label>AI Sensitivity</Label>
-                <Select defaultValue="balanced">
+                <Select onValueChange={handleSelectChange('aiSensitivity')} value={preferences.aiSensitivity}>
                     <SelectTrigger>
                         <SelectValue placeholder="Select AI sensitivity" />
                     </SelectTrigger>

@@ -47,6 +47,63 @@
           "type": "string",
           "description": "User's date of birth.",
           "format": "date-time"
+        },
+        "preferences": {
+          "type": "object",
+          "description": "User-specific application preferences.",
+          "properties": {
+            "theme": {
+              "type": "string",
+              "enum": [
+                "light",
+                "dark",
+                "system"
+              ]
+            },
+            "language": {
+              "type": "string",
+              "enum": [
+                "en",
+                "hi"
+              ]
+            },
+            "units": {
+              "type": "string",
+              "enum": [
+                "metric",
+                "imperial"
+              ]
+            },
+            "biometric": {
+              "type": "boolean"
+            },
+            "appLock": {
+              "type": "boolean"
+            },
+            "emergencyAlerts": {
+              "type": "boolean"
+            },
+            "insightAlerts": {
+              "type": "boolean"
+            },
+            "weeklySummary": {
+              "type": "boolean"
+            },
+            "wifiSync": {
+              "type": "boolean"
+            },
+            "bluetoothSync": {
+              "type": "boolean"
+            },
+            "aiSensitivity": {
+              "type": "string",
+              "enum": [
+                "low",
+                "balanced",
+                "high"
+              ]
+            }
+          }
         }
       },
       "required": [
