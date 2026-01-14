@@ -76,8 +76,18 @@ export default function HealthStatusPage() {
   const reportRef = useRef<HTMLDivElement>(null);
   const [reportData, setReportData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [currentDate, setCurrentDate] = useState('');
   const { user } = useUser();
   const firestore = useFirestore();
+
+  useEffect(() => {
+    // Set the date only on the client-side to avoid hydration mismatch
+    setCurrentDate(new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }));
+  }, []);
 
   const handleDownload = async () => {
       if (!user || !firestore) {
@@ -169,7 +179,7 @@ export default function HealthStatusPage() {
           </div>
         </div>
         <p className="text-xs text-muted-foreground mt-2">
-          Last Assessment: Nov 14, 2023 - Data Period: Last 7 Days
+          {currentDate ? `Last Assessment: ${currentDate}` : 'Loading date...'} - Data Period: Last 7 Days
         </p>
       </div>
 
