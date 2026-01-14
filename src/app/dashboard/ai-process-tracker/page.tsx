@@ -43,7 +43,7 @@ export default function AiProcessTrackerPage() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fade-in">
       <div className="lg:col-span-2 space-y-8">
         <div className="animate-slide-up" style={{animationDelay: '200ms'}}>
-            <h1 className="text-3xl font-headline font-bold">AI Process Tracker</h1>
+            <h1 className="text-3xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent animate-text-gradient bg-400">AI Process Tracker</h1>
             <p className="text-muted-foreground">
                 Visualize AI stages: data capture, preprocessing, inference, and validation.
             </p>
