@@ -1,4 +1,6 @@
-import { SettingsTabs } from "@/components/settings/settings-tabs";
+
+'use client';
+import { SettingsTabs } from '@/components/settings/settings-tabs';
 
 export default function SettingsPage() {
   return (

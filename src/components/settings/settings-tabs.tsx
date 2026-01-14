@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import {
   Card,
   CardContent,
@@ -33,6 +34,7 @@ export function SettingsTabs() {
   const [wifiSync, setWifiSync] = useState(false);
   const [bluetoothSync, setBluetoothSync] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const { setTheme, theme } = useTheme();
 
   useEffect(() => {
     setIsClient(true);
@@ -102,7 +104,7 @@ export function SettingsTabs() {
           <CardContent className="space-y-6">
             <div className="flex items-center justify-between">
                 <Label className="flex items-center gap-2"><Palette/> Theme</Label>
-                <Select defaultValue="system">
+                <Select onValueChange={setTheme} value={theme}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Select theme" />
                     </SelectTrigger>
