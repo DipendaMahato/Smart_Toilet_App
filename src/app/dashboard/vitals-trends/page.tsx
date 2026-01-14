@@ -35,7 +35,7 @@ const weeklyData = {
     { name: 'Sun', value: 120 }, { name: 'Mon', value: 150 }, { name: 'Tue', value: 130 }, { name: 'Wed', value: 180 }, { name: 'Thu', value: 160 }, { name: 'Fri', value: 200 }, { name: 'Sat', value: 170 },
   ],
   stool: [
-    { name: 'Sun', bristol: 25, highRisk: 30 }, { name: 'Mon', bristol: 28, highRisk: 30 }, { name: 'Tue', bristol: 22, highRisk: 30 }, { name: 'Wed', bristol: 30, highRisk: 30 }, { name: 'Thu', bristol: 27, highRisk: 30 }, { name: 'Fri', bristol: 32, highRisk: 30 }, { name: 'Sat', bristol: 29, highRisk: 30 },
+    { name: 'Sun', bristol: 25, highRisk: 30 }, { name: 'Mon', bristol: 28, highRisk: 30 }, { name: 'Tue', bristol: 22, highRisk: 30 }, { name: 'Wed', bristol: 30, highRisk: 30 }, { name: 'Thu', bristol: 27, highRisk: 30 }, { name: 'Fri', value: 32, highRisk: 30 }, { name: 'Sat', bristol: 29, highRisk: 30 },
   ],
 };
 
@@ -50,7 +50,7 @@ const monthlyData = {
     { name: 'Jan', value: 450 }, { name: 'Feb', value: 500 }, { name: 'Mar', value: 480 }, { name: 'Apr', value: 550 }, { name: 'May', value: 520 }, { name: 'Jun', value: 600 }, { name: 'Jul', value: 580 },
   ],
   stool: [
-    { name: 'Jan', bristol: 30, highRisk: 30 }, { name: 'Feb', bristol: 32, highRisk: 30 }, { name: 'Mar', bristol: 28, highRisk: 30 }, { name: 'Apr', bristol: 35, highRisk: 30 }, { name: 'May', bristol: 33, highRisk: 30 }, { name: 'Jun', bristol: 38, highRisk: 30 }, { name: 'Jul', bristol: 36, highRisk: 30 },
+    { name: 'Jan', bristol: 30, highRisk: 30 }, { name: 'Feb', bristol: 32, highRisk: 30 }, { name: 'Mar', bristol: 28, highRisk: 30 }, { name: 'Apr', value: 35, highRisk: 30 }, { name: 'May', bristol: 33, highRisk: 30 }, { name: 'Jun', value: 38, highRisk: 30 }, { name: 'Jul', value: 36, highRisk: 30 },
   ],
 };
 
@@ -82,7 +82,7 @@ export default function VitalsTrendsPage() {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 animate-slide-up">
         <div>
-          <h1 className="text-3xl font-headline font-bold">Health Vitals &amp; Trends</h1>
+          <h1 className="text-3xl font-headline font-bold text-transparent bg-clip-text bg-gradient-to-r from-glow-lime-emerald to-glow-teal-green animate-text-gradient bg-400">Health Vitals &amp; Trends</h1>
           <p className="text-muted-foreground">
             Analytical views of health vitals with daily, weekly, and long-term trend graphs.
           </p>
