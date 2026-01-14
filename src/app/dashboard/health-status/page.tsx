@@ -87,12 +87,10 @@ export default function HealthStatusPage() {
       setLoading(true);
 
       try {
-          // 1. Fetch User Profile
           const userDocRef = doc(firestore, 'users', user.uid);
           const userDocSnap = await getDoc(userDocRef);
           const userData = userDocSnap.exists() ? userDocSnap.data() : null;
 
-          // 2. Fetch Latest Health Data
           const healthDataColRef = collection(firestore, 'users', user.uid, 'healthData');
           const q = query(healthDataColRef, orderBy('timestamp', 'desc'), limit(1));
           const healthQuerySnap = await getDocs(q);
@@ -100,21 +98,22 @@ export default function HealthStatusPage() {
           
           setReportData({ user: userData, health: latestHealthData });
 
-          // Wait for state to update and DOM to render
+          // This timeout ensures that the reportData state has been updated and the
+          // DownloadableReport component has re-rendered with the new data before we try to print it.
           setTimeout(() => {
               const element = reportRef.current;
               if (element && window.html2pdf) {
                    const opt = {
-                      margin:       [0.5, 0.2],
+                      margin:       [0.4, 0.4],
                       filename:     `Health_Report_${user.displayName?.replace(' ', '_') || 'User'}.pdf`,
                       image:        { type: 'jpeg', quality: 0.98 },
-                      html2canvas:  { scale: 2, useCORS: true, logging: false },
+                      html2canvas:  { scale: 2, useCORS: true, logging: true },
                       jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                   };
                   window.html2pdf().from(element).set(opt).save();
               }
               setLoading(false);
-          }, 500); // Increased timeout to ensure data is populated
+          }, 500);
 
       } catch (error) {
           console.error("Error generating report:", error);
@@ -126,14 +125,10 @@ export default function HealthStatusPage() {
 
   return (
     <div className="space-y-8 animate-fade-in">
-      {/* Report Download Component (Hidden) */}
-      <div className="hidden">
-        <div id="report-container">
+      <div className="fixed -left-[9999px] top-0 opacity-0">
           <DownloadableReport ref={reportRef} data={reportData} />
-        </div>
       </div>
 
-      {/* Overall Health Score */}
       <div className="text-center animate-slide-up">
         <div className="relative inline-block">
           <div className="absolute inset-0 flex items-center justify-center">
@@ -153,7 +148,7 @@ export default function HealthStatusPage() {
               className="text-green-500 drop-shadow-[0_0_5px_#4ade80]"
               strokeWidth="4"
               strokeDasharray="289.027"
-              strokeDashoffset="28.9" // 10% offset to leave a gap
+              strokeDashoffset="28.9"
               strokeLinecap="round"
               stroke="currentColor"
               fill="transparent"
@@ -178,7 +173,6 @@ export default function HealthStatusPage() {
         </p>
       </div>
 
-      {/* System Health Summary */}
       <div className="animate-slide-up" style={{ animationDelay: '200ms' }}>
         <h2 className="text-center text-xl font-headline font-semibold mb-4">System Health Summary</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -188,7 +182,6 @@ export default function HealthStatusPage() {
         </div>
       </div>
 
-      {/* AI Clinical Health Conclusion */}
       <div className="animate-slide-up" style={{ animationDelay: '400ms' }}>
          <Card className="bg-card/50 border border-primary/20">
             <CardHeader>

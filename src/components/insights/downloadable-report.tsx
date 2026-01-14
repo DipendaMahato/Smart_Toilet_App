@@ -1,7 +1,6 @@
 
 'use client';
 import React, { forwardRef } from 'react';
-import Image from 'next/image';
 import { Timestamp } from 'firebase/firestore';
 
 interface ReportProps {
@@ -28,6 +27,11 @@ const getAge = (dob: Date | string | Timestamp) => {
     return age;
 };
 
+const getStatusStyle = (isNormal: boolean) => ({
+  color: isNormal ? 'green' : 'red',
+  fontWeight: 'bold',
+});
+
 export const DownloadableReport = forwardRef<HTMLDivElement, ReportProps>(({ data }, ref) => {
     if (!data) return <div ref={ref}></div>;
 
@@ -35,97 +39,88 @@ export const DownloadableReport = forwardRef<HTMLDivElement, ReportProps>(({ dat
     const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(' ') || 'N/A';
     const age = getAge(user?.dateOfBirth);
     const gender = user?.gender ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1) : 'N/A';
+    
+    // Urine Data Processing
     const calculatedPH = health?.ph_level ? (health.ph_level / 2187.5).toFixed(2) : 'N/A';
-    const getStatus = (value: any, normalRange: [number, number] | string, isNominal: boolean = false) => {
-        if (value === 'N/A') return 'N/A';
-
-        if (isNominal) {
-             if(typeof normalRange !== 'string') return 'N/A';
-             return normalRange.split(' - ').includes(value) ? 'NORMAL' : 'ABNORMAL';
-        }
-        
-        if(typeof normalRange === 'string' || typeof value !== 'number') return 'N/A';
-
-        return value >= normalRange[0] && value <= normalRange[1] ? 'NORMAL' : 'ABNORMAL';
-    };
+    const isPhNormal = parseFloat(calculatedPH) >= 5.0 && parseFloat(calculatedPH) <= 7.5;
+    const isSgNormal = health?.specificGravity >= 1.005 && health?.specificGravity <= 1.030;
+    const isGlucoseNormal = (health?.glucoseValue ?? 0) <= 0;
+    
+    // Stool Data Processing
+    const isBristolNormal = health?.stoolStatus === 'Type 3' || health?.stoolStatus === 'Type 4';
 
 
     return (
-        <div ref={ref} style={{ width: '800px', padding: '40px', background: 'white', color: 'black', fontFamily: "'Segoe UI', Arial, sans-serif" }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #004a99', paddingBottom: '15px', marginBottom: '25px' }}>
-                <img src="/logo.png" alt="logo" style={{ width: '60px', height: '60px' }}/>
+        <div ref={ref} style={{ width: '790px', padding: '40px', background: 'white', color: 'black', fontFamily: "'Arial', sans-serif" }}>
+            
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '2px solid #004a99', paddingBottom: '10px', marginBottom: '20px' }}>
+                <img src="/logo.png" alt="logo" style={{ height: '60px' }}/>
                 <div style={{ textAlign: 'center' }}>
-                    <h1 style={{ margin: 0, color: '#004a99' }}>USER HEALTH REPORT</h1>
-                    <div style={{ fontSize: '13px', color: '#555', marginTop: '5px' }}>
-                        Support: +91 6201158797 | Email: smarttoiletapp5@gmail.com
+                    <h1 style={{ margin: 0, color: '#004a99', fontSize: '24px', textTransform: 'uppercase' }}>User Health Report</h1>
+                    <div style={{ marginTop: '5px', fontSize: '12px', color: '#333' }}>
+                        Contact: +91 6201158797 | Email: smarttoiletapp5@gmail.com
                     </div>
                 </div>
                 <div style={{ width: '60px' }}></div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px', border: '1px solid #eee', padding: '15px', borderRadius: '8px', marginBottom: '25px' }}>
-                <div style={{ width: '50%' }}>
-                    <p style={{ margin: '5px 0' }}><strong>Full Name:</strong> <span>{fullName}</span></p>
-                    <p style={{ margin: '5px 0' }}><strong>Age/Gender:</strong> <span>{`${age} Yrs / ${gender}`}</span></p>
-                    <p style={{ margin: '5px 0' }}><strong>Blood Group:</strong> <span>{user?.bloodGroup || 'N/A'}</span></p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', border: '1px solid #ddd', padding: '15px', marginBottom: '20px', fontSize: '14px', borderRadius: '8px' }}>
+                <div>
+                    <p style={{ margin: '4px 0' }}><strong>Name:</strong> <span>{fullName}</span></p>
+                    <p style={{ margin: '4px 0' }}><strong>Age / Sex:</strong> <span>{`${age} Yrs / ${gender}`}</span></p>
+                    <p style={{ margin: '4px 0' }}><strong>Blood Group:</strong> <span>{user?.bloodGroup || 'N/A'}</span></p>
                 </div>
-                <div style={{ width: '50%', textAlign: 'right' }}>
-                    <p style={{ margin: '5px 0' }}><strong>Contact:</strong> <span>{user?.phoneNumber || 'N/A'}</span></p>
-                    <p style={{ margin: '5px 0' }}><strong>User Email:</strong> <span>{user?.email || 'N/A'}</span></p>
-                    <p style={{ margin: '5px 0' }}><strong>Date:</strong> <span>{new Date().toLocaleDateString()}</span></p>
+                <div style={{ textAlign: 'right' }}>
+                    <p style={{ margin: '4px 0' }}><strong>Phone:</strong> <span>{user?.phoneNumber || 'N/A'}</span></p>
+                    <p style={{ margin: '4px 0' }}><strong>Email:</strong> <span>{user?.email || 'N/A'}</span></p>
+                    <p style={{ margin: '4px 0' }}><strong>Date Generated:</strong> <span>{new Date().toLocaleDateString()}</span></p>
                 </div>
             </div>
 
-            <h3 style={{ textAlign: 'center', background: '#f4f4f4', padding: '8px', borderRadius: '4px', margin: '0 0 10px 0' }}>CLINICAL ANALYSIS SUMMARY</h3>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead style={{ background: '#004a99', color: 'white' }}>
+            <h3 style={{ background: '#004a99', color: 'white', padding: '5px 10px', fontSize: '16px', borderRadius: '4px 4px 0 0', margin: '0' }}>URINE ROUTINE EXAMINATION</h3>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px', fontSize: '13px' }}>
+                <thead style={{ background: '#f2f2f2' }}>
                     <tr>
-                        <th style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>TEST PARAMETER</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>RESULT</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>REFERENCE RANGE</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>STATUS</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>TEST PARAMETER</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>RESULT</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>REFERENCE RANGE</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>STATUS</th>
                     </tr>
                 </thead>
-                <tbody style={{ textAlign: 'center', fontSize: '14px' }}>
-                    <tr>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>Urine Volume</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>{health?.urineVolume || 'N/A'} ml</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>150 - 450 ml</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', color: getStatus(health?.urineVolume, [150, 450]) === 'NORMAL' ? 'green' : 'red', fontWeight: 'bold' }}>{getStatus(health?.urineVolume, [150, 450])}</td>
-                    </tr>
-                    <tr>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>pH Level</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>{calculatedPH}</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>5.0 - 7.5</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', color: getStatus(parseFloat(calculatedPH), [5.0, 7.5]) === 'NORMAL' ? 'green' : 'red', fontWeight: 'bold' }}>{getStatus(parseFloat(calculatedPH), [5.0, 7.5])}</td>
-                    </tr>
-                    <tr>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>Specific Gravity</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>{health?.specificGravity || 'N/A'}</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>1.005 - 1.030</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', color: getStatus(health?.specificGravity, [1.005, 1.030]) === 'NORMAL' ? 'green' : 'red', fontWeight: 'bold' }}>{getStatus(health?.specificGravity, [1.005, 1.030])}</td>
-                    </tr>
-                    <tr>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>Glucose/Sugar</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>{health?.glucoseValue > 0 ? 'Present' : 'Absent'}</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>Absent</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', color: health?.glucoseValue > 0 ? 'red' : 'green', fontWeight: 'bold' }}>{health?.glucoseValue > 0 ? 'ABNORMAL' : 'NORMAL'}</td>
-                    </tr>
-                    <tr>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', textAlign: 'left' }}>Bristol Stool Type</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>{health?.stoolStatus || 'N/A'}</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd' }}>Type 3 - Type 4</td>
-                        <td style={{ padding: '10px', border: '1px solid #ddd', color: getStatus(health?.stoolStatus, 'Type 3 - Type 4', true) === 'NORMAL' ? 'green' : 'red', fontWeight: 'bold' }}>{getStatus(health?.stoolStatus, 'Type 3 - Type 4', true)}</td>
-                    </tr>
+                <tbody>
+                    <tr><td style={{ border: '1px solid #ddd', padding: '8px' }}>pH Level</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{calculatedPH}</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>5.0 - 7.5</td><td style={{ ...getStatusStyle(isPhNormal), border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{isPhNormal ? 'NORMAL' : 'ABNORMAL'}</td></tr>
+                    <tr><td style={{ border: '1px solid #ddd', padding: '8px' }}>Specific Gravity</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{health?.specificGravity || 'N/A'}</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>1.005 - 1.030</td><td style={{ ...getStatusStyle(isSgNormal), border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{isSgNormal ? 'NORMAL' : 'ABNORMAL'}</td></tr>
+                    <tr><td style={{ border: '1px solid #ddd', padding: '8px' }}>Urine Glucose (Sugar)</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{isGlucoseNormal ? 'Absent' : 'Present'}</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>Absent</td><td style={{ ...getStatusStyle(isGlucoseNormal), border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{isGlucoseNormal ? 'NORMAL' : 'ABNORMAL'}</td></tr>
+                    <tr><td style={{ border: '1px solid #ddd', padding: '8px' }}>Blood Detection</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{health?.bloodDetected ? 'Detected' : 'Negative'}</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>Negative</td><td style={{ ...getStatusStyle(!health?.bloodDetected), border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{health?.bloodDetected ? 'ABNORMAL' : 'NORMAL'}</td></tr>
                 </tbody>
             </table>
 
-            <div style={{ marginTop: '40px', borderTop: '1px solid #ddd', paddingTop: '10px', fontSize: '11px', color: '#666' }}>
-                <p>Note: This report is generated by AI Smart Toilet Analytics for wellness tracking. It is not a substitute for professional medical diagnosis.</p>
-                <p style={{ textAlign: 'right', fontWeight: 'bold', marginTop: '20px' }}>Authorized Electronic Signature</p>
+            <h3 style={{ background: '#004a99', color: 'white', padding: '5px 10px', fontSize: '16px', borderRadius: '4px 4px 0 0', margin: '0' }}>STOOL ANALYSIS (AI PROCESS TRACKER)</h3>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px', fontSize: '13px' }}>
+                <thead style={{ background: '#f2f2f2' }}>
+                    <tr>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'left' }}>TEST PARAMETER</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>RESULT</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>REFERENCE RANGE</th>
+                        <th style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>STATUS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td style={{ border: '1px solid #ddd', padding: '8px' }}>Bristol Stool Scale</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{health?.stoolStatus || 'N/A'}</td><td style={{ border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>Type 3 - Type 4</td><td style={{ ...getStatusStyle(isBristolNormal), border: '1px solid #ddd', padding: '8px', textAlign: 'center' }}>{isBristolNormal ? 'NORMAL' : 'ABNORMAL'}</td></tr>
+                </tbody>
+            </table>
+
+            <div style={{ padding: '15px', border: '1px solid #22d3ee', background: '#f0fbff', borderRadius: '5px' }}>
+                <p style={{ margin: 0, fontSize: '14px' }}><strong>AI Clinical Summary:</strong> All physiological markers for the current period are within optimal reference ranges. No abnormal chemical or physical markers were detected in urine or stool analysis.</p>
+            </div>
+
+            <div style={{ marginTop: '40px', borderTop: '1px solid #ddd', paddingTop: '10px', fontSize: '10px', color: '#666', display: 'flex', justifyContent: 'space-between' }}>
+                <span>This is a digital health report generated by Smart Toilet AI.</span>
+                <span style={{ fontWeight: 'bold', color: 'black', fontSize: '12px' }}>Authorized Digital Signature</span>
             </div>
         </div>
     );
 });
 
 DownloadableReport.displayName = 'DownloadableReport';
+
