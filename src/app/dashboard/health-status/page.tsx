@@ -104,7 +104,7 @@ export default function HealthStatusPage() {
               const element = reportRef.current;
               if (element && window.html2pdf) {
                    const opt = {
-                      margin:       [0.4, 0.4],
+                      margin:       [0.2, 0.4],
                       filename:     `Health_Report_${user.displayName?.replace(' ', '_') || 'User'}.pdf`,
                       image:        { type: 'jpeg', quality: 0.98 },
                       html2canvas:  { scale: 2, useCORS: true, logging: true },
