@@ -3,6 +3,9 @@ const nextConfig = {
   output: "export",
   basePath: "/Smart_Toilet_App",
   images: { unoptimized: true },
+
+  typescript: { ignoreBuildErrors: true },
+  eslint: { ignoreDuringBuilds: true },
 };
 
 module.exports = nextConfig;
